@@ -19,3 +19,5 @@
 *.out
 *.app
 *.hex
+
+bin/
