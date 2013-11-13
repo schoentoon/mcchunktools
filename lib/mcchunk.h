@@ -63,9 +63,19 @@ size_t count_chunks(regionfile* region);
  */
 int region_contains_chunk(regionfile* region, int32_t cx, int32_t cz);
 
-/** Returns the nbt structure @see cNBT for this particular chunk
- * @see region_contains_chunk
+/** Returns the nbt structure for this particular chunk
+ * @see region_contains_chunk @see chunk_from_coord
  */
 nbt_node* get_chunk(regionfile* region, int32_t cx, int32_t cz);
+
+/** Calculate in which chunk this coordinate is
+ */
+#define chunk_from_coord(i) (i/16)
+
+/** Determine in which region file the chunk cx, cz
+ * is located. @see region_contains_chunk @see chunk_from_coord
+ * Don't forget to free the output!
+ */
+char* determine_region_file(int32_t cx, int32_t cz);
 
 #endif //_MCCHUNK_H
