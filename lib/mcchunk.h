@@ -47,6 +47,14 @@ void free_region(regionfile* region);
  */
 size_t count_chunks(regionfile* region);
 
+/** Loop through all the available chunks in our regionfile
+ * don't do some odd for loop yourself calling get_chunk as
+ * this function is simply more efficient, it keeps the file
+ * open for example. (And it's just easier..)
+ * Also don't keep node around, as it is freed automatically.
+ */
+void for_each_chunk(regionfile* region, void *function(nbt_node* node));
+
 /** Check if this region structure contains the
  * chunk located at x: cx y: cy returns 1 if it
  * is in the region structure, 0 otherwise

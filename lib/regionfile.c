@@ -53,6 +53,32 @@ size_t count_chunks(regionfile* region) {
   return 0;
 };
 
+void for_each_chunk(regionfile* region, void *function(nbt_node* node)) {
+  if (!region || !function)
+    return;
+  FILE* f = fopen(region->filename, "rb");
+  size_t i;
+  for (i = 0; i < SECTOR_INTS; i++) {
+    uint32_t offset = region->offsets[i];
+    if (offset == 0)
+      continue;
+    uint32_t numSectors = offset & 0xff;
+    if (numSectors == 0)
+      continue;
+    uint32_t sectorStart = offset >> 8;
+    if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
+      unsigned char buf[numSectors*SECTOR_BYTES];
+      if (fread(buf, 1, sizeof(buf), f) == sizeof(buf)) {
+        size_t size = be32toh((uint32_t) buf);
+        nbt_node* node = nbt_parse_compressed(buf+5, size);
+        function(node);
+        nbt_free(node);
+      }
+    }
+  }
+  fclose(f);
+};
+
 void free_region(regionfile* region) {
   if (region) {
     free(region->filename);
