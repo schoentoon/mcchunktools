@@ -30,11 +30,15 @@ static const struct option g_LongOpts[] = {
 };
 
 int usage(char* program) {
+  fprintf(stderr, "Usage: %s [OPTIONS]\n", program);
+  fprintf(stderr, "--regionfile, -r Use this region file [required]\n");
+  fprintf(stderr, "--chunkx, -x     The x coordinate of the chunk to read out.\n");
+  fprintf(stderr, "--chunkz, -z     The z coordinate of the chunk to read out.\n");
   return 1;
 };
 
 int main(int argc, char** argv) {
-  int32_t chunkx, chunkz = 0;
+  int32_t chunkx = 0, chunkz = 0;
   char* rfile = NULL;
   int arg, optindex;
   while ((arg = getopt_long(argc, argv, "hr:x:z:", g_LongOpts, &optindex)) != -1) {
@@ -52,6 +56,8 @@ int main(int argc, char** argv) {
       break;
     }
   }
+  if (!rfile)
+    return usage(argv[0]);
   regionfile* region = open_regionfile(rfile);
   if (!region_contains_chunk(region, chunkx, chunkz)) {
     fprintf(stderr, "This region file doesn't contain chunk x:%d, z:%d\n", chunkx, chunkz);
