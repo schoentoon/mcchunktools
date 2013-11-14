@@ -10,8 +10,11 @@ bin:
 regionfile.o: regionfile.c mcchunk.h
 	$(CC) $(CFLAGS) $(INC) -c -o regionfile.o regionfile.c
 
-libmcchunk.a: regionfile.o
-	ar -rcs libmcchunk.a regionfile.o
+blockdb.o: blockdb.c mcchunk.h
+	$(CC) $(CFLAGS) $(INC) -c -o blockdb.o blockdb.c
+
+libmcchunk.a: regionfile.o blockdb.o
+	ar -rcs libmcchunk.a regionfile.o blockdb.o
 
 clean:
 	rm -rfv *.a *.o

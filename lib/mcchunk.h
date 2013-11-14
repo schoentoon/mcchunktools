@@ -86,4 +86,14 @@ nbt_node* get_chunk(regionfile* region, int32_t cx, int32_t cz);
  */
 char* determine_region_file(int32_t cx, int32_t cz);
 
+/** Initialize the block names database
+ * you must call this once before using get_block_name
+ */
+void initblockdb();
+
+/** Get the human readable name for block_id with data
+ * if the block simply doesn't exist it'll return NULL
+ */
+char* get_block_name(uint8_t block_id, uint8_t data);
+
 #endif //_MCCHUNK_H
