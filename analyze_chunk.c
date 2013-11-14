@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <getopt.h>
+#include <string.h>
 
 static const struct option g_LongOpts[] = {
   { "help",       no_argument,       0, 'h' },
@@ -62,10 +63,36 @@ int main(int argc, char** argv) {
   }
   nbt_node* node = get_chunk(region, chunkx, chunkz);
   if (node) {
-    char* dump = nbt_dump_ascii(node);
-    fprintf(stdout, "%s\n", dump);
-    free(dump);
+    uint64_t analyze[256][16];
+    bzero(analyze, sizeof(analyze));
+    nbt_node* sections = nbt_find_by_name(node, "Sections");
+    struct list_head* pos;
+    list_for_each(pos, &sections->payload.tag_list->entry) {
+      const struct nbt_list* entry = list_entry(pos, const struct nbt_list, entry);
+      nbt_node* blocks = nbt_find_by_name(entry->data, "Blocks");
+      nbt_node* data = nbt_find_by_name(entry->data, "Data");
+      if (blocks && data && blocks->type == TAG_BYTE_ARRAY && data->type == TAG_BYTE_ARRAY
+        && blocks->payload.tag_byte_array.length == 4096
+        && data->payload.tag_byte_array.length == 2048) {
+        size_t i;
+        for (i = 0; i < blocks->payload.tag_byte_array.length; i++) {
+          if (i % 2 == 0)
+            analyze[blocks->payload.tag_byte_array.data[i]][data->payload.tag_byte_array.data[i/2] & 15]++;
+          else
+            analyze[blocks->payload.tag_byte_array.data[i]][data->payload.tag_byte_array.data[i/2] >> 4]++;
+        }
+      }
+    }
     nbt_free(node);
+    initblockdb();
+    size_t i;
+    for (i = 0; i < 256; i++) {
+      size_t j;
+      for (j = 0; j < 16; j++) {
+        if (analyze[i][j] > 0)
+          fprintf(stderr, "%s %lu\n", get_block_name(i, j), analyze[i][j]);
+      }
+    }
   } else {
     fprintf(stderr, "%s\n", nbt_error_to_string(errno));
   }
