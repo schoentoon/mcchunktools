@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     free(tmp);
     return 1;
   }
-  nbt_node* node = get_chunk(region, chunkx, chunkz);
+  nbt_node* node = get_raw_chunk(region, chunkx, chunkz);
   if (node) {
     char* dump = nbt_dump_ascii(node);
     fprintf(stdout, "%s\n", dump);

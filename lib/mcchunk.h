@@ -74,7 +74,7 @@ int region_contains_chunk(regionfile* region, int32_t cx, int32_t cz);
 /** Returns the nbt structure for this particular chunk
  * @see region_contains_chunk @see chunk_from_coord
  */
-nbt_node* get_chunk(regionfile* region, int32_t cx, int32_t cz);
+nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz);
 
 /** Calculate in which chunk this coordinate is
  */
@@ -95,5 +95,29 @@ void initblockdb();
  * if the block simply doesn't exist it'll return NULL
  */
 char* get_block_name(uint8_t block_id, uint8_t data);
+
+#define CHUNK_WIDTH 16
+#define CHUNK_LENGTH 16
+#define CHUNK_HEIGHT 256
+
+typedef struct {
+  int32_t x;
+  int32_t z;
+  int8_t blocks[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
+  int8_t data[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
+} chunk;
+
+/** Get a chunk structure for the chunk located at cx, cz in
+ * region. Blocks in this structure are accessed using the
+ * blocks and data arrays, it would look like the following:
+ * c->blocks[x][z][y];
+ */
+chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz);
+
+/** Simple macro to free a chunk structure, might be changed in
+ * the future if we actually alloc stuff internally in the chunk
+ * structure.
+ */
+#define free_chunk(c) free(c);
 
 #endif //_MCCHUNK_H

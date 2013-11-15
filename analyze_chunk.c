@@ -67,29 +67,17 @@ int main(int argc, char** argv) {
     free(tmp);
     return 1;
   }
-  nbt_node* node = get_chunk(region, chunkx, chunkz);
-  if (node) {
+  chunk* c = get_chunk(region, chunkx, chunkz);
+  if (c) {
     uint64_t analyze[256][16];
     bzero(analyze, sizeof(analyze));
-    nbt_node* sections = nbt_find_by_name(node, "Sections");
-    struct list_head* pos;
-    list_for_each(pos, &sections->payload.tag_list->entry) {
-      const struct nbt_list* entry = list_entry(pos, const struct nbt_list, entry);
-      nbt_node* blocks = nbt_find_by_name(entry->data, "Blocks");
-      nbt_node* data = nbt_find_by_name(entry->data, "Data");
-      if (blocks && data && blocks->type == TAG_BYTE_ARRAY && data->type == TAG_BYTE_ARRAY
-        && blocks->payload.tag_byte_array.length == 4096
-        && data->payload.tag_byte_array.length == 2048) {
-        size_t i;
-        for (i = 0; i < blocks->payload.tag_byte_array.length; i++) {
-          if (i % 2 == 0)
-            analyze[blocks->payload.tag_byte_array.data[i]][data->payload.tag_byte_array.data[i/2] & 15]++;
-          else
-            analyze[blocks->payload.tag_byte_array.data[i]][data->payload.tag_byte_array.data[i/2] >> 4]++;
-        }
+    uint8_t x, z, y;
+    for (x = 0; x < 16; x++) {
+      for (z = 0; z < 16; z++) {
+        for (y = 0; y < 255; y++)
+          analyze[c->blocks[x][z][y]][c->data[x][z][y]]++;
       }
     }
-    nbt_free(node);
     initblockdb();
     size_t i;
     for (i = 0; i < 256; i++) {
@@ -99,6 +87,7 @@ int main(int argc, char** argv) {
           fprintf(stderr, "%s %lu\n", get_block_name(i, j), analyze[i][j]);
       }
     }
+    free_chunk(c);
   } else {
     fprintf(stderr, "%s\n", nbt_error_to_string(errno));
   }

@@ -97,7 +97,7 @@ int region_contains_chunk(regionfile* region, int32_t cx, int32_t cz) {
   return 1;
 };
 
-nbt_node* get_chunk(regionfile* region, int32_t cx, int32_t cz) {
+nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
   if (!region)
     return NULL;
   cx &= 0x1f;

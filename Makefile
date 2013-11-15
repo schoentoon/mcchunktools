@@ -1,4 +1,4 @@
-CFLAGS  := -Wall -O3 -mtune=native
+CFLAGS  := -Wall -O3 -mtune=native -g
 CC      := gcc
 INC     := -IcNBT -Ilib
 
