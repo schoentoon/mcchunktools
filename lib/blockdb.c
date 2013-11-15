@@ -27,6 +27,7 @@ void initblockdb() {
   blocks[1][0] = "Stone";
   blocks[2][0] = "Grass";
   blocks[3][0] = "Dirt";
+  blocks[3][2] = "Podzol";
   blocks[4][0] = "Cobblestone";
   blocks[5][0] = "Oak Wood Plank";
   blocks[5][1] = "Spruce Wood Plank";
