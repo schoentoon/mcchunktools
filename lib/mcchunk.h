@@ -18,6 +18,10 @@
 #ifndef _MCCHUNK_H
 #define _MCCHUNK_H
 
+#if __STDC_VERSION__ < 199901L
+#define restrict
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
