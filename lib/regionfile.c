@@ -69,7 +69,7 @@ void for_each_chunk(regionfile* region, void *function(nbt_node* node)) {
     if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
       unsigned char buf[numSectors*SECTOR_BYTES];
       if (fread(buf, 1, sizeof(buf), f) == sizeof(buf)) {
-        size_t size = be32toh((uint32_t) buf);
+        size_t size = be32toh((uint32_t) (buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24)));
         nbt_node* node = nbt_parse_compressed(buf+5, size);
         function(node);
         nbt_free(node);
@@ -113,8 +113,8 @@ nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
   nbt_node* output = NULL;
   if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
     unsigned char buf[numSectors*SECTOR_BYTES];
-    if (fread(buf, 1, sizeof(buf), f) == sizeof(buf)) {
-      size_t size = be32toh((uint32_t) buf); /* First 4 bytes are the length */
+    if (fread(buf, 1, sizeof(buf), f) == sizeof(buf)) { /* First 4 bytes are the length */
+      size_t size = be32toh((uint32_t) (buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24)));
       output = nbt_parse_compressed(buf+5, size); /* Fifth byte is the compression algorithm */
     }                                             /* But we don't need that as cNBT will figure that out */
   }
