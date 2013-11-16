@@ -23,3 +23,8 @@ clean:
 	find -name \*.o -delete
 	find -name \*.a -delete
 	rm -rf bin
+
+.PHONY: doc
+
+doc:
+	doxygen
