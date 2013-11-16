@@ -71,13 +71,17 @@ int main(int argc, char** argv) {
   if (c) {
     uint64_t analyze[256][16];
     bzero(analyze, sizeof(analyze));
+    uint8_t analyze_biomes[256];
+    bzero(analyze_biomes, sizeof(analyze_biomes));
     uint8_t x, z, y;
     for (x = 0; x < 16; x++) {
       for (z = 0; z < 16; z++) {
+        analyze_biomes[c->biomes[x][z]]++;
         for (y = 0; y < 255; y++)
           analyze[c->blocks[x][z][y]][c->data[x][z][y]]++;
       }
     }
+    free_chunk(c);
     initblockdb();
     size_t i;
     for (i = 0; i < 256; i++) {
@@ -87,7 +91,11 @@ int main(int argc, char** argv) {
           fprintf(stderr, "%s %lu\n", get_block_name(i, j), analyze[i][j]);
       }
     }
-    free_chunk(c);
+    initbiomedb();
+    for (i = 0; i < 256; i++) {
+      if (analyze_biomes[i] > 0)
+        fprintf(stderr, "%s %hhu\n", get_biome_name(i), analyze_biomes[i]);
+    }
   } else {
     fprintf(stderr, "%s\n", nbt_error_to_string(errno));
   }

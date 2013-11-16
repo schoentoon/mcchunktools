@@ -86,15 +86,27 @@ nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz);
  */
 char* determine_region_file(int32_t cx, int32_t cz);
 
-/** Initialize the block names database
- * you must call this once before using get_block_name
+/** Initialize the block names database you must call
+ * this once before using @see get_block_name
  */
 void initblockdb();
 
 /** Get the human readable name for block_id with data
  * if the block simply doesn't exist it'll return NULL
+ * @see initblockdb
  */
 char* get_block_name(uint8_t block_id, uint8_t data);
+
+/** Initialize the biome name database
+ * you must call this before using @see get_biome_name
+ */
+void initbiomedb();
+
+/** Get the human readable name for biome_id if this
+ * biome_id simply doesn't exist it'll return NULL
+ * (-1 isn't even handled) @see initbiomedb
+ */
+char* get_biome_name(uint8_t biome_id);
 
 #define CHUNK_WIDTH 16
 #define CHUNK_LENGTH 16

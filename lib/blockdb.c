@@ -375,3 +375,75 @@ char* get_block_name(uint8_t block_id, uint8_t data) {
   }
   return blocks[block_id][data];
 };
+
+char* biomes[256];
+
+void initbiomedb() {
+  bzero(biomes, sizeof(biomes));
+  biomes[0] = "Ocean";
+  biomes[1] = "Plains";
+  biomes[2] = "Desert";
+  biomes[3] = "Extreme Hills";
+  biomes[4] = "Forest";
+  biomes[5] = "Taiga";
+  biomes[6] = "Swampland";
+  biomes[7] = "River";
+  biomes[8] = "Hell (Nether)";
+  biomes[9] = "Sky (End)";
+  biomes[10] = "Frozen Ocean";
+  biomes[11] = "Frozen River";
+  biomes[12] = "Ice Plains";
+  biomes[13] = "Ice Mountains";
+  biomes[14] = "Mushroom Island";
+  biomes[15] = "Mushroom Island Shore";
+  biomes[16] = "Beach";
+  biomes[17] = "Desert Hills";
+  biomes[18] = "Forest Hills";
+  biomes[19] = "Taiga Hills";
+  biomes[20] = "Extreme Hills Edge";
+  biomes[21] = "Jungle";
+  biomes[22] = "Jungle Hills";
+  biomes[23] = "Jungle Edge";
+  biomes[24] = "Deep Ocean";
+  biomes[25] = "Stone Beach";
+  biomes[26] = "Cold Beach";
+  biomes[27] = "Birch Forest";
+  biomes[28] = "Birch Forest Hills";
+  biomes[29] = "Roofed Forest";
+  biomes[30] = "Cold Taiga";
+  biomes[31] = "Cold Taiga Hills";
+  biomes[32] = "Mega Taiga";
+  biomes[33] = "Mega Taiga Hills";
+  biomes[34] = "Extreme Hills+";
+  biomes[35] = "Savanna";
+  biomes[36] = "Savanna Plateau";
+  biomes[37] = "Mesa";
+  biomes[38] = "Mesa Plateau F";
+  biomes[39] = "Mesa Plateau";
+  biomes[129] = "Sunflower Plains";
+  biomes[130] = "Desert M";
+  biomes[131] = "Extreme Hills M";
+  biomes[132] = "Flower Forest";
+  biomes[133] = "Taiga M";
+  biomes[134] = "Swampland M";
+  biomes[140] = "Ice Plains Spikes";
+  biomes[141] = "Ice Mountains Spikes";
+  biomes[149] = "Jungle M";
+  biomes[151] = "JungleEdge M";
+  biomes[155] = "Birch Forest M";
+  biomes[156] = "Birch Forest Hills M";
+  biomes[157] = "Roofed Forest M";
+  biomes[158] = "Cold Taiga M";
+  biomes[160] = "Mega Spruce Taiga";
+  biomes[161] = "Mega Spruce Taiga Hills";
+  biomes[162] = "Extreme Hills+ M";
+  biomes[163] = "Savanna M";
+  biomes[164] = "Savanna Plateau M";
+  biomes[165] = "Mesa (Bryce)";
+  biomes[166] = "Mesa Plateau F M";
+  biomes[167] = "Mesa Plateau M";
+};
+
+char* get_biome_name(uint8_t biome_id) {
+  return biomes[biome_id];
+};
