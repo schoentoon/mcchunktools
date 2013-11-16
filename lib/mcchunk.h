@@ -105,6 +105,7 @@ typedef struct {
   int32_t z;
   int8_t blocks[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
   int8_t data[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
+  int8_t biomes[CHUNK_WIDTH][CHUNK_LENGTH];
 } chunk;
 
 /** Get a chunk structure for the chunk located at cx, cz in

@@ -28,10 +28,10 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz) {
   output->x = cx;
   output->z = cz;
   nbt_node* sections = nbt_find_by_name(node, "Sections");
-  struct list_head* pos;
   uint8_t x = 0;
   uint8_t z = 0;
   uint8_t y = 0;
+  struct list_head* pos;
   list_for_each(pos, &sections->payload.tag_list->entry) {
     const struct nbt_list* entry = list_entry(pos, const struct nbt_list, entry);
     nbt_node* blocks_a = nbt_find_by_name(entry->data, "Blocks");
@@ -59,6 +59,20 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz) {
       }
     } else
       goto error;
+  }
+  nbt_node* biomes_a = nbt_find_by_name(node, "Biomes");
+  if (biomes_a && biomes_a->type == TAG_BYTE_ARRAY && biomes_a->payload.tag_byte_array.length == 256) {
+    x = 0;
+    z = 0;
+    size_t i;
+    for (i = 0; i < biomes_a->payload.tag_byte_array.length; i++) {
+      output->biomes[x][z] = biomes_a->payload.tag_byte_array.data[i];
+      if (++x == CHUNK_WIDTH) {
+        if (++z == CHUNK_LENGTH)
+          z = 0;
+        x = 0;
+      }
+    }
   }
   return output;
 error:
