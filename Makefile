@@ -24,7 +24,10 @@ clean:
 	find -name \*.a -delete
 	rm -rf bin
 
-.PHONY: doc
+.PHONY: doc test
+
+test: libnbt lib/libmcchunk.a
+	$(MAKE) -C test CC="$(CC)"
 
 doc:
 	doxygen
