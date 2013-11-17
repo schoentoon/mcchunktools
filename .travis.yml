@@ -1,0 +1,13 @@
+language: c
+compiler:
+  - gcc
+  - clang
+script:
+  - make CC=$CC
+  - make CC=$CC test
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.org#schoentoon"
+    on_success: always
+    on_failure: always
