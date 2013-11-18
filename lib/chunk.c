@@ -74,6 +74,7 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz) {
       }
     }
   }
+  nbt_free(node);
   return output;
 error:
   free_chunk(output);

@@ -2,9 +2,12 @@ language: c
 compiler:
   - gcc
   - clang
+before_script:
+  - sudo apt-get update -qq >/dev/null 2>&1
+  - sudo apt-get install -qq valgrind >/dev/null 2>&1
 script:
-  - make CC=$CC
-  - make CC=$CC test
+  - make CC=$CC CFLAGS=-Werror
+  - make CC=$CC CFLAGS=-Werror test
 notifications:
   irc:
     channels:

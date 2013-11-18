@@ -6,7 +6,7 @@
 # it, you can buy us a beer in return.
 # -----------------------------------------------------------------------------
 
-CFLAGS=-g -Wall -Wextra -std=c99 -pedantic -fPIC
+override CFLAGS += -std=c99 -pedantic -fPIC
 
 all: nbtreader check
 

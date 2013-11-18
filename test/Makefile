@@ -1,6 +1,8 @@
-CFLAGS  := -Wall -O3 -mtune=native -g
+CFLAGS  := -Wall -O3 -mtune=native -g $(CFLAGS)
 CC      := gcc
 INC     := -I../cNBT -I../lib
+VALGRIND:= /usr/bin/valgrind
+VALGRIND_OPTS:= --leak-check=full
 
 .PHONY: bin/test1
 
@@ -11,7 +13,7 @@ bin:
 
 bin/test1: bin test1.c
 	$(CC) $(CFLAGS) $(INC) -o bin/test1 test1.c ../lib/libmcchunk.a ../cNBT/libnbt.a -lz
-	./bin/test1
+	$(VALGRIND) $(VALGRIND_OPTS) ./bin/test1
 
 clean:
 	rm -rf bin/

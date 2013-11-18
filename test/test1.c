@@ -33,6 +33,8 @@ int main(int argc, char** argv) {
 
   insist(c, "get_chunk returned NULL");
 
+  insist(c->blocks[2][1][56] == 95 && c->data[2][1][56] == 15, "Expected black stained glass at x:2, z:1, y:56");
+
   uint64_t analyze[256][16];
   bzero(analyze, sizeof(analyze));
   uint8_t analyze_biomes[256];
@@ -54,6 +56,7 @@ int main(int argc, char** argv) {
   insist(analyze[54][2] == 1, "Got %zu chests, expected 1", analyze[54][2]);
   insist(analyze[95][5] == 2, "Got %zu lime stained glass blocks, expected 2", analyze[95][5]);
   insist(analyze[95][15] == 1, "Got %zu black stained glass blocks, expected 1", analyze[95][15]);
+
 
   insist(analyze_biomes[2] == 252, "Got %hhu blocks with a desert biome, expected 252", analyze_biomes[2]);
   insist(analyze_biomes[17] == 4, "Got %hhu blocks with a desert hills biome, expected 4", analyze_biomes[17]);

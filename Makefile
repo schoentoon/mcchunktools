@@ -1,6 +1,6 @@
-CFLAGS  := -Wall -O3 -mtune=native -g
-CC      := gcc
-INC     := -IcNBT -Ilib
+override CFLAGS  += -Wall -O3 -mtune=native -g
+CC               := gcc
+INC              := -IcNBT -Ilib
 
 all: bin/printchunk bin/analyzechunk
 
@@ -14,10 +14,10 @@ bin/analyzechunk: bin libnbt lib/libmcchunk.a analyze_chunk.c
 	$(CC) $(CFLAGS) $(INC) -o bin/analyzechunk analyze_chunk.c lib/libmcchunk.a cNBT/libnbt.a -lz
 
 libnbt:
-	$(MAKE) -C cNBT libnbt.a CC="$(CC)"
+	$(MAKE) -C cNBT libnbt.a CC="$(CC)" CFLAGS="$(CFLAGS)"
 
 lib/libmcchunk.a:
-	$(MAKE) -C lib CC="$(CC)"
+	$(MAKE) -C lib CC="$(CC)" CFLAGS="$(CFLAGS)"
 
 clean:
 	find -name \*.o -delete
