@@ -15,6 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef __cplusplus
+#  pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
+
 #include "mcchunk.h"
 
 #include "insist.h"

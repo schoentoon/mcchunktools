@@ -18,8 +18,12 @@
 #ifndef _MCCHUNK_H
 #define _MCCHUNK_H
 
-#if __STDC_VERSION__ < 199901L
-#define restrict
+#ifdef __cplusplus
+extern "C" {
+#else
+#  if __STDC_VERSION__ < 199901L
+#    define restrict
+#  endif
 #endif
 
 #include <stdio.h>
@@ -136,5 +140,9 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz);
  * structure.
  */
 #define free_chunk(c) free(c);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_MCCHUNK_H
