@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz) {
+chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags) {
   nbt_node* node = get_raw_chunk(region, cx, cz);
   if (!node)
     return NULL;
@@ -74,10 +74,30 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz) {
       }
     }
   }
+  if (flags & GET_TILE_ENTITIES) {
+    nbt_node* tentities = nbt_find_by_name(node, "TileEntities");
+    if (tentities && tentities->type == TAG_LIST)
+      output->tile_entities = nbt_clone(tentities);
+  }
+  if (flags & GET_ENTITIES) {
+    nbt_node* entities = nbt_find_by_name(node, "Entities");
+    if (entities && entities->type == TAG_LIST)
+      output->entities = nbt_clone(entities);
+  }
   nbt_free(node);
   return output;
 error:
   free_chunk(output);
   nbt_free(node);
   return NULL;
+};
+
+void free_chunk(chunk* c) {
+  if (c) {
+    if (c->tile_entities)
+      nbt_free(c->tile_entities);
+    if (c->entities)
+      nbt_free(c->entities);
+    free(c);
+  }
 };

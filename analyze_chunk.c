@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
       fprintf(stderr, "I suggest you look in \"%s\" instead.\n", buf);
     return 1;
   }
-  chunk* c = get_chunk(region, chunkx, chunkz);
+  chunk* c = get_chunk(region, chunkx, chunkz, 0);
   if (c) {
     uint64_t analyze[256][16];
     bzero(analyze, sizeof(analyze));

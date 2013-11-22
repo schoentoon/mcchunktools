@@ -33,7 +33,10 @@ int main(int argc, char** argv) {
   insist(count_chunks(region) == 121, "Expected 121 chunks in our test file, got %zu, did our testfile change?", count_chunks(region));
   insist(region_contains_chunk(region, chunkx, chunkz), "Our test region file doesn't contain chunk 0,0");
 
-  chunk* c = get_chunk(region, chunkx, chunkz);
+  chunk* c = get_chunk(region, chunkx, chunkz, GET_TILE_ENTITIES|GET_ENTITIES);
+
+  insist(c->tile_entities != NULL, "Requested tile entities but we didn't get them?");
+  insist(c->entities != NULL, "Requested entities but we didn't get them?");
 
   insist(c, "get_chunk returned NULL");
 

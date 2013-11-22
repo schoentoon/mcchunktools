@@ -126,20 +126,25 @@ typedef struct {
   int8_t blocks[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
   int8_t data[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
   int8_t biomes[CHUNK_WIDTH][CHUNK_LENGTH];
+  nbt_node* tile_entities;
+  nbt_node* entities;
 } chunk;
+
+enum chunk_options {
+  GET_TILE_ENTITIES = (1<<0),
+  GET_ENTITIES      = (1<<1)
+};
 
 /** Get a chunk structure for the chunk located at cx, cz in
  * region. Blocks in this structure are accessed using the
  * blocks and data arrays, it would look like the following:
  * c->blocks[x][z][y];
  */
-chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz);
+chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags);
 
-/** Simple macro to free a chunk structure, might be changed in
- * the future if we actually alloc stuff internally in the chunk
- * structure.
+/** Free function for the chunk structure
  */
-#define free_chunk(c) free(c);
+void free_chunk(chunk* c);
 
 #ifdef __cplusplus
 }
