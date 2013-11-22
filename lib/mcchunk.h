@@ -92,7 +92,7 @@ nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz);
  * is located. @see region_contains_chunk @see chunk_from_coord
  * Don't forget to free the output!
  */
-char* determine_region_file(int32_t cx, int32_t cz);
+size_t determine_region_file(char* buf, size_t len, int32_t cx, int32_t cz);
 
 /** Initialize the block names database you must call
  * this once before using @see get_block_name

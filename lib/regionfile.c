@@ -122,8 +122,6 @@ nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
   return output;
 };
 
-char* determine_region_file(int32_t cx, int32_t cz) {
-  char buf[BUFSIZ];
-  snprintf(buf, sizeof(buf), "r.%d.%d.mca", cx >> 5, cz >> 5);
-  return strdup(buf);
+size_t determine_region_file(char* buf, size_t len, int32_t cx, int32_t cz) {
+  return snprintf(buf, len, "r.%d.%d.mca", cx >> 5, cz >> 5);
 };

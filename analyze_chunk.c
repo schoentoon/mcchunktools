@@ -62,9 +62,9 @@ int main(int argc, char** argv) {
   regionfile* region = open_regionfile(rfile);
   if (!region_contains_chunk(region, chunkx, chunkz)) {
     fprintf(stderr, "This region file doesn't contain chunk x:%d, z:%d\n", chunkx, chunkz);
-    char* tmp = determine_region_file(chunkx, chunkz);
-    fprintf(stderr, "I suggest you look in \"%s\" instead.\n", tmp);
-    free(tmp);
+    char buf[BUFSIZ];
+    if (determine_region_file(buf, sizeof(buf), chunkx, chunkz) > 0)
+      fprintf(stderr, "I suggest you look in \"%s\" instead.\n", buf);
     return 1;
   }
   chunk* c = get_chunk(region, chunkx, chunkz);
