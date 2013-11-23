@@ -60,19 +60,8 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags) {
       goto error;
   }
   nbt_node* biomes_a = nbt_find_by_name(node, "Biomes");
-  if (biomes_a && biomes_a->type == TAG_BYTE_ARRAY && biomes_a->payload.tag_byte_array.length == 256) {
-    x = 0;
-    z = 0;
-    size_t i;
-    for (i = 0; i < biomes_a->payload.tag_byte_array.length; i++) {
-      output->biomes[x][z] = biomes_a->payload.tag_byte_array.data[i];
-      if (++x == CHUNK_WIDTH) {
-        if (++z == CHUNK_LENGTH)
-          z = 0;
-        x = 0;
-      }
-    }
-  }
+  if (biomes_a && biomes_a->type == TAG_BYTE_ARRAY && biomes_a->payload.tag_byte_array.length == 256)
+    memcpy(output->biomes, biomes_a->payload.tag_byte_array.data, biomes_a->payload.tag_byte_array.length);
   nbt_node* inhabitedTime_a = nbt_find_by_name(node, "InhabitedTime");
   if (inhabitedTime_a && inhabitedTime_a->type == TAG_LONG)
     output->inhabitedTime = inhabitedTime_a->payload.tag_long;

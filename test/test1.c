@@ -44,6 +44,8 @@ int main(int argc, char** argv) {
 
   insist(c->blocks[56][1][2] == 95 && c->data[56][1][2] == 15, "Expected black stained glass at x:2, z:1, y:56");
 
+  insist(c->biomes[2][3] == 17, "Expected desert hills biome at x:2,z:1");
+
   uint64_t analyze[256][16];
   bzero(analyze, sizeof(analyze));
   uint8_t analyze_biomes[256];
@@ -51,7 +53,7 @@ int main(int argc, char** argv) {
   uint8_t x, z, y;
   for (x = 0; x < 16; x++) {
     for (z = 0; z < 16; z++) {
-      analyze_biomes[c->biomes[x][z]]++;
+      analyze_biomes[c->biomes[z][x]]++;
       for (y = 0; y < 255; y++)
         analyze[c->blocks[y][z][x]][c->data[y][z][x]]++;
     }

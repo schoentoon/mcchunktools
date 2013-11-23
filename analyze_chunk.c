@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     uint8_t x, z, y;
     for (x = 0; x < 16; x++) {
       for (z = 0; z < 16; z++) {
-        analyze_biomes[c->biomes[x][z]]++;
+        analyze_biomes[c->biomes[z][x]]++;
         for (y = 0; y < 255; y++)
           analyze[c->blocks[y][z][x]][c->data[y][z][x]]++;
       }
