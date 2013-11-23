@@ -38,6 +38,8 @@ int main(int argc, char** argv) {
   insist(c->tile_entities != NULL, "Requested tile entities but we didn't get them?");
   insist(c->entities != NULL, "Requested entities but we didn't get them?");
 
+  insist(c->inhabitedTime == 65, "We expected inhabited time to be 65, not %ld", c->inhabitedTime);
+
   insist(c, "get_chunk returned NULL");
 
   insist(c->blocks[2][1][56] == 95 && c->data[2][1][56] == 15, "Expected black stained glass at x:2, z:1, y:56");

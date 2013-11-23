@@ -74,6 +74,9 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags) {
       }
     }
   }
+  nbt_node* inhabitedTime_a = nbt_find_by_name(node, "InhabitedTime");
+  if (inhabitedTime_a && inhabitedTime_a->type == TAG_LONG)
+    output->inhabitedTime = inhabitedTime_a->payload.tag_long;
   if (flags & GET_TILE_ENTITIES) {
     nbt_node* tentities = nbt_find_by_name(node, "TileEntities");
     if (tentities && tentities->type == TAG_LIST)

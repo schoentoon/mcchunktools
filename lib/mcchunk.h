@@ -126,6 +126,7 @@ typedef struct {
   int8_t blocks[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
   int8_t data[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
   int8_t biomes[CHUNK_WIDTH][CHUNK_LENGTH];
+  int64_t inhabitedTime;
   nbt_node* tile_entities;
   nbt_node* entities;
 } chunk;
