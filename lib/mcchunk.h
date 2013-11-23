@@ -123,8 +123,8 @@ char* get_biome_name(uint8_t biome_id);
 typedef struct {
   int32_t x;
   int32_t z;
-  int8_t blocks[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
-  int8_t data[CHUNK_WIDTH][CHUNK_LENGTH][CHUNK_HEIGHT];
+  int8_t blocks[CHUNK_HEIGHT][CHUNK_LENGTH][CHUNK_WIDTH];
+  int8_t data[CHUNK_HEIGHT][CHUNK_LENGTH][CHUNK_WIDTH];
   int8_t biomes[CHUNK_WIDTH][CHUNK_LENGTH];
   int64_t inhabitedTime;
   nbt_node* tile_entities;
@@ -139,7 +139,7 @@ enum chunk_options {
 /** Get a chunk structure for the chunk located at cx, cz in
  * region. Blocks in this structure are accessed using the
  * blocks and data arrays, it would look like the following:
- * c->blocks[x][z][y];
+ * c->blocks[y][z][x];
  */
 chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags);
 

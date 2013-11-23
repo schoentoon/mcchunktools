@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 
   insist(c, "get_chunk returned NULL");
 
-  insist(c->blocks[2][1][56] == 95 && c->data[2][1][56] == 15, "Expected black stained glass at x:2, z:1, y:56");
+  insist(c->blocks[56][1][2] == 95 && c->data[56][1][2] == 15, "Expected black stained glass at x:2, z:1, y:56");
 
   uint64_t analyze[256][16];
   bzero(analyze, sizeof(analyze));
@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     for (z = 0; z < 16; z++) {
       analyze_biomes[c->biomes[x][z]]++;
       for (y = 0; y < 255; y++)
-        analyze[c->blocks[x][z][y]][c->data[x][z][y]]++;
+        analyze[c->blocks[y][z][x]][c->data[y][z][x]]++;
     }
   }
   free_chunk(c);

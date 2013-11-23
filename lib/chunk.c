@@ -39,16 +39,15 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags) {
     if (blocks_a && data_a && blocks_a->type == TAG_BYTE_ARRAY && data_a->type == TAG_BYTE_ARRAY
       && blocks_a->payload.tag_byte_array.length == 4096
       && data_a->payload.tag_byte_array.length == 2048) {
+      memcpy(output->blocks[y], blocks_a->payload.tag_byte_array.data, blocks_a->payload.tag_byte_array.length);
       size_t i;
       for (i = 0; i < blocks_a->payload.tag_byte_array.length; i++) {
         int8_t data = 0;
-        int8_t block = blocks_a->payload.tag_byte_array.data[i];
         if (i % 2 == 0)
           data = data_a->payload.tag_byte_array.data[i/2] & 15;
         else
           data = data_a->payload.tag_byte_array.data[i/2] >> 4;
-        output->blocks[x][z][y] = block;
-        output->data[x][z][y] = data;
+        output->data[y][z][x] = data;
         if (++x == CHUNK_WIDTH) {
           if (++z == CHUNK_LENGTH) {
             z = 0;

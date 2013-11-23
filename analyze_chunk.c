@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
       for (z = 0; z < 16; z++) {
         analyze_biomes[c->biomes[x][z]]++;
         for (y = 0; y < 255; y++)
-          analyze[c->blocks[x][z][y]][c->data[x][z][y]]++;
+          analyze[c->blocks[y][z][x]][c->data[y][z][x]]++;
       }
     }
     free_chunk(c);
