@@ -26,12 +26,28 @@
 #include <errno.h>
 #include <string.h>
 
+void analyze_biomes_func(chunk* c, void* context) {
+  uint16_t *analyze_biomes = (uint16_t*) context; /* This kind of stuff is kind of really dirty and should never */
+  uint8_t x, z;                                   /* be done in production program. This is purely to test the */
+  for (x = 0; x < 16; x++) {                      /* for_each_chunk function. In production programs you would probably */
+    for (z = 0; z < 16; z++)                      /* want to define your own structure, allocate it on the heap and pass */
+      analyze_biomes[c->biomes[z][x]]++;          /* that to the context. */
+  };
+};
+
 int main(int argc, char** argv) {
   int32_t chunkx = 0, chunkz = 0;
   regionfile* region = open_regionfile("testdata/r.0.0.mca");
 
   insist(count_chunks(region) == 121, "Expected 121 chunks in our test file, got %zu, did our testfile change?", count_chunks(region));
   insist(region_contains_chunk(region, chunkx, chunkz), "Our test region file doesn't contain chunk 0,0");
+
+  uint16_t reg_biomes[256];
+  bzero(&reg_biomes, sizeof(reg_biomes));
+  for_each_chunk(region, analyze_biomes_func, &reg_biomes);
+
+  insist(reg_biomes[17] == 4, "Expected only 4 desert hill biomes in all of the chunks available, got %d", reg_biomes[17]);
+  insist(reg_biomes[2] == 30972, "Expected 30972 desert biomes in all of these chunks, got %d", reg_biomes[2]);
 
   chunk* c = get_chunk(region, chunkx, chunkz, GET_TILE_ENTITIES|GET_ENTITIES);
 
