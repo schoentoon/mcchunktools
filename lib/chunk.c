@@ -22,8 +22,12 @@
 chunk* nbt_to_chunk(nbt_node* node, uint16_t flags) {
   chunk* output = malloc(sizeof(chunk));
   bzero(output, sizeof(chunk));
-  //output->x = cx; //TODO Extract this from the nbt_node*
-  //output->z = cz;
+  nbt_node* xPos = nbt_find_by_name(node, "xPos");
+  if (xPos && xPos->type == TAG_INT)
+    output->x = xPos->payload.tag_int;
+  nbt_node* zPos = nbt_find_by_name(node, "zPos");
+  if (zPos && zPos->type == TAG_INT)
+    output->z = zPos->payload.tag_int;
   nbt_node* sections = nbt_find_by_name(node, "Sections");
   uint8_t x = 0;
   uint8_t z = 0;
@@ -84,10 +88,6 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags) {
     return NULL;
   chunk* output = nbt_to_chunk(node, flags);
   nbt_free(node);
-  if (output) {
-    output->x = cz;
-    output->z = cz;
-  }
   return output;
 };
 
