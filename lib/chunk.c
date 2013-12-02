@@ -19,14 +19,11 @@
 
 #include <string.h>
 
-chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags) {
-  nbt_node* node = get_raw_chunk(region, cx, cz);
-  if (!node)
-    return NULL;
+chunk* nbt_to_chunk(nbt_node* node, uint16_t flags) {
   chunk* output = malloc(sizeof(chunk));
   bzero(output, sizeof(chunk));
-  output->x = cx;
-  output->z = cz;
+  //output->x = cx; //TODO Extract this from the nbt_node*
+  //output->z = cz;
   nbt_node* sections = nbt_find_by_name(node, "Sections");
   uint8_t x = 0;
   uint8_t z = 0;
@@ -75,12 +72,23 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags) {
     if (entities && entities->type == TAG_LIST)
       output->entities = nbt_clone(entities);
   }
-  nbt_free(node);
   return output;
 error:
   free_chunk(output);
-  nbt_free(node);
   return NULL;
+};
+
+chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags) {
+  nbt_node* node = get_raw_chunk(region, cx, cz);
+  if (!node)
+    return NULL;
+  chunk* output = nbt_to_chunk(node, flags);
+  nbt_free(node);
+  if (output) {
+    output->x = cz;
+    output->z = cz;
+  }
+  return output;
 };
 
 void free_chunk(chunk* c) {

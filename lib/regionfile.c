@@ -53,7 +53,7 @@ size_t count_chunks(regionfile* region) {
   return 0;
 };
 
-void for_each_chunk(regionfile* region, void *function(nbt_node* node)) {
+void for_each_chunk_raw(regionfile* region, raw_chunk_func function, void* context) {
   if (!region || !function)
     return;
   FILE* f = fopen(region->filename, "rb");
@@ -71,12 +71,33 @@ void for_each_chunk(regionfile* region, void *function(nbt_node* node)) {
       if (fread(buf, 1, sizeof(buf), f) == sizeof(buf)) {
         size_t size = be32toh((uint32_t) (buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24)));
         nbt_node* node = nbt_parse_compressed(buf+5, size);
-        function(node);
+        function(node, context);
         nbt_free(node);
       }
     }
   }
   fclose(f);
+};
+
+struct __for_each_chunk_struct {
+  void* context;
+  chunk_func function;
+};
+
+void __for_each_chunk(nbt_node* node, void* context) {
+  struct __for_each_chunk_struct* data = context;
+  chunk* c = nbt_to_chunk(node, 0);
+  if (c) {
+    data->function(c, data->context);
+    free_chunk(c);
+  }
+};
+
+void for_each_chunk(regionfile* region, chunk_func function, void* context) {
+  struct __for_each_chunk_struct data;
+  data.context = context;
+  data.function = function;
+  for_each_chunk_raw(region, __for_each_chunk, &data);
 };
 
 void free_region(regionfile* region) {

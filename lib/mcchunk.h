@@ -41,6 +41,26 @@ typedef struct {
   char* filename;
 } regionfile;
 
+#define CHUNK_WIDTH 16
+#define CHUNK_LENGTH 16
+#define CHUNK_HEIGHT 256
+
+typedef struct {
+  int32_t x;
+  int32_t z;
+  int8_t blocks[CHUNK_HEIGHT][CHUNK_LENGTH][CHUNK_WIDTH];
+  int8_t data[CHUNK_HEIGHT][CHUNK_LENGTH][CHUNK_WIDTH];
+  int8_t biomes[CHUNK_LENGTH][CHUNK_WIDTH];
+  int64_t inhabitedTime;
+  nbt_node* tile_entities;
+  nbt_node* entities;
+} chunk;
+
+enum chunk_options {
+  GET_TILE_ENTITIES = (1<<0),
+  GET_ENTITIES      = (1<<1)
+};
+
 /** Used to open a region file simply pass
  * the filename into it
  */
@@ -55,13 +75,22 @@ void free_region(regionfile* region);
  */
 size_t count_chunks(regionfile* region);
 
+typedef void (*raw_chunk_func)(nbt_node* node, void* context);
+
+/** Similar to for_each_chunk but gives you access to the raw nbt_node*
+ * instead.
+ */
+void for_each_chunk_raw(regionfile* region, raw_chunk_func function, void* context);
+
+typedef void (*chunk_func)(chunk* c, void* context);
+
 /** Loop through all the available chunks in our regionfile
  * don't do some odd for loop yourself calling get_chunk as
  * this function is simply more efficient, it keeps the file
  * open for example. (And it's just easier..)
- * Also don't keep node around, as it is freed automatically.
+ * Don't keep the chunk around, as it is freed automatically
  */
-void for_each_chunk(regionfile* region, void *function(nbt_node* node));
+void for_each_chunk(regionfile* region, chunk_func function, void* context);
 
 /** Check if this region structure contains the
  * chunk located at x: cx y: cy returns 1 if it
@@ -83,6 +112,11 @@ int region_contains_chunk(regionfile* region, int32_t cx, int32_t cz);
  * @see region_contains_chunk @see chunk_from_coord
  */
 nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz);
+
+/** Convert a raw nbt_node* to a chunk structure instead
+ * will return NULL upon failure.
+ */
+chunk* nbt_to_chunk(nbt_node* node, uint16_t flags);
 
 /** Calculate in which chunk this coordinate is
  */
@@ -115,26 +149,6 @@ void initbiomedb();
  * (-1 isn't even handled) @see initbiomedb
  */
 char* get_biome_name(uint8_t biome_id);
-
-#define CHUNK_WIDTH 16
-#define CHUNK_LENGTH 16
-#define CHUNK_HEIGHT 256
-
-typedef struct {
-  int32_t x;
-  int32_t z;
-  int8_t blocks[CHUNK_HEIGHT][CHUNK_LENGTH][CHUNK_WIDTH];
-  int8_t data[CHUNK_HEIGHT][CHUNK_LENGTH][CHUNK_WIDTH];
-  int8_t biomes[CHUNK_LENGTH][CHUNK_WIDTH];
-  int64_t inhabitedTime;
-  nbt_node* tile_entities;
-  nbt_node* entities;
-} chunk;
-
-enum chunk_options {
-  GET_TILE_ENTITIES = (1<<0),
-  GET_ENTITIES      = (1<<1)
-};
 
 /** Get a chunk structure for the chunk located at cx, cz in
  * region. Blocks in this structure are accessed using the
