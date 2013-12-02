@@ -86,6 +86,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
 <a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -120,14 +121,21 @@ Macros</h2></td></tr>
 <tr class="separator:ad5bb9549436d43dd7d06db851d8a67b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac62a66e114422c251c08ab8cd90c7bd5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#ac62a66e114422c251c08ab8cd90c7bd5">SECTOR_INTS</a>&#160;&#160;&#160;1024</td></tr>
 <tr class="separator:ac62a66e114422c251c08ab8cd90c7bd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30685e958d599410e5cf70c42b50ee24"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a30685e958d599410e5cf70c42b50ee24">chunk_from_coord</a>(i)&#160;&#160;&#160;(i/16)</td></tr>
-<tr class="separator:a30685e958d599410e5cf70c42b50ee24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57daea2b5f42af17f83e7e3a5240290a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a57daea2b5f42af17f83e7e3a5240290a">CHUNK_WIDTH</a>&#160;&#160;&#160;16</td></tr>
 <tr class="separator:a57daea2b5f42af17f83e7e3a5240290a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca6aa0546369464b73640610c2ed073e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#aca6aa0546369464b73640610c2ed073e">CHUNK_LENGTH</a>&#160;&#160;&#160;16</td></tr>
 <tr class="separator:aca6aa0546369464b73640610c2ed073e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a708996a6ab44089275abf1fc88d45cf8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a708996a6ab44089275abf1fc88d45cf8">CHUNK_HEIGHT</a>&#160;&#160;&#160;256</td></tr>
 <tr class="separator:a708996a6ab44089275abf1fc88d45cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30685e958d599410e5cf70c42b50ee24"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a30685e958d599410e5cf70c42b50ee24">chunk_from_coord</a>(i)&#160;&#160;&#160;(i/16)</td></tr>
+<tr class="separator:a30685e958d599410e5cf70c42b50ee24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a26d6bec2cc50badf3ca20ef5951bbd40"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a26d6bec2cc50badf3ca20ef5951bbd40">raw_chunk_func</a> )(<a class="el" href="structnbt__node.html">nbt_node</a> *node, void *context)</td></tr>
+<tr class="separator:a26d6bec2cc50badf3ca20ef5951bbd40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f8d68fc030d0f6d2902f140a4752b66"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a4f8d68fc030d0f6d2902f140a4752b66">chunk_func</a> )(<a class="el" href="structchunk.html">chunk</a> *c, void *context)</td></tr>
+<tr class="separator:a4f8d68fc030d0f6d2902f140a4752b66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -144,12 +152,16 @@ Functions</h2></td></tr>
 <tr class="separator:a8beaa06216425db6f70ace9419778e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acacf410b3e866fffe117207e71d20d6d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#acacf410b3e866fffe117207e71d20d6d">count_chunks</a> (<a class="el" href="structregionfile.html">regionfile</a> *region)</td></tr>
 <tr class="separator:acacf410b3e866fffe117207e71d20d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace95246158209f417bf45705a4460fcf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#ace95246158209f417bf45705a4460fcf">for_each_chunk</a> (<a class="el" href="structregionfile.html">regionfile</a> *region, void *function(<a class="el" href="structnbt__node.html">nbt_node</a> *node))</td></tr>
-<tr class="separator:ace95246158209f417bf45705a4460fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cbccbbc72a2bd51b4dc02a6a55a3b02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a7cbccbbc72a2bd51b4dc02a6a55a3b02">for_each_chunk_raw</a> (<a class="el" href="structregionfile.html">regionfile</a> *region, <a class="el" href="mcchunk_8h.html#a26d6bec2cc50badf3ca20ef5951bbd40">raw_chunk_func</a> function, void *context)</td></tr>
+<tr class="separator:a7cbccbbc72a2bd51b4dc02a6a55a3b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4b727b080decd0504b026ad488325a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#ae4b727b080decd0504b026ad488325a7">for_each_chunk</a> (<a class="el" href="structregionfile.html">regionfile</a> *region, <a class="el" href="mcchunk_8h.html#a4f8d68fc030d0f6d2902f140a4752b66">chunk_func</a> function, void *context)</td></tr>
+<tr class="separator:ae4b727b080decd0504b026ad488325a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1020bb2e2590be93adfdda96524a8ac5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a1020bb2e2590be93adfdda96524a8ac5">region_contains_chunk</a> (<a class="el" href="structregionfile.html">regionfile</a> *region, int32_t cx, int32_t cz)</td></tr>
 <tr class="separator:a1020bb2e2590be93adfdda96524a8ac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affcf52309beed69f4294b8b052df3c25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnbt__node.html">nbt_node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#affcf52309beed69f4294b8b052df3c25">get_raw_chunk</a> (<a class="el" href="structregionfile.html">regionfile</a> *region, int32_t cx, int32_t cz)</td></tr>
 <tr class="separator:affcf52309beed69f4294b8b052df3c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8432ef26f58736f01bf10e1bcd58a525"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structchunk.html">chunk</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a8432ef26f58736f01bf10e1bcd58a525">nbt_to_chunk</a> (<a class="el" href="structnbt__node.html">nbt_node</a> *node, uint16_t flags)</td></tr>
+<tr class="separator:a8432ef26f58736f01bf10e1bcd58a525"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1659af8a14bc94b442eb3a93a4bba474"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a1659af8a14bc94b442eb3a93a4bba474">determine_region_file</a> (char *buf, size_t len, int32_t cx, int32_t cz)</td></tr>
 <tr class="separator:a1659af8a14bc94b442eb3a93a4bba474"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dca3e8544feac48c57c8f3d1834ba2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a7dca3e8544feac48c57c8f3d1834ba2d">initblockdb</a> ()</td></tr>
@@ -181,7 +193,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Calculate in which chunk this coordinate is </p>
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00089">89</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00123">123</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -195,7 +207,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00121">121</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00046">46</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -209,7 +221,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00120">120</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00045">45</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -223,7 +235,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00119">119</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00044">44</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -269,6 +281,35 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="a4f8d68fc030d0f6d2902f140a4752b66"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* chunk_func)(<a class="el" href="structchunk.html">chunk</a> *c, void *context)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00085">85</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a26d6bec2cc50badf3ca20ef5951bbd40"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* raw_chunk_func)(<a class="el" href="structnbt__node.html">nbt_node</a> *node, void *context)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00078">78</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a class="anchor" id="a7ffd8844cbe7de4a0a779e40e2646ab6"></a>
 <div class="memitem">
@@ -286,7 +327,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00134">134</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00059">59</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -350,7 +391,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ace95246158209f417bf45705a4460fcf"></a>
+<a class="anchor" id="ae4b727b080decd0504b026ad488325a7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -363,8 +404,14 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="mcchunk_8h.html#a4f8d68fc030d0f6d2902f140a4752b66">chunk_func</a>&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>function</em>nbt_node *node&#160;</td>
+          <td class="paramname"><em>context</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -373,7 +420,40 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Loop through all the available chunks in our regionfile don't do some odd for loop yourself calling get_chunk as this function is simply more efficient, it keeps the file open for example. (And it's just easier..) Also don't keep node around, as it is freed automatically. </p>
+<p>Loop through all the available chunks in our regionfile don't do some odd for loop yourself calling get_chunk as this function is simply more efficient, it keeps the file open for example. (And it's just easier..) Don't keep the chunk around, as it is freed automatically </p>
+
+</div>
+</div>
+<a class="anchor" id="a7cbccbbc72a2bd51b4dc02a6a55a3b02"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void for_each_chunk_raw </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structregionfile.html">regionfile</a> *&#160;</td>
+          <td class="paramname"><em>region</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="mcchunk_8h.html#a26d6bec2cc50badf3ca20ef5951bbd40">raw_chunk_func</a>&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>context</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Similar to for_each_chunk but gives you access to the raw nbt_node* instead. </p>
 
 </div>
 </div>
@@ -563,6 +643,33 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Initialize the block names database you must call this once before using</p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="mcchunk_8h.html#ad3273d9e3acd5b35b9459cd9781bc83b">get_block_name</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8432ef26f58736f01bf10e1bcd58a525"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structchunk.html">chunk</a>* nbt_to_chunk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnbt__node.html">nbt_node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Convert a raw nbt_node* to a chunk structure instead will return NULL upon failure. </p>
 
 </div>
 </div>
