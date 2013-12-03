@@ -100,3 +100,49 @@ void free_chunk(chunk* c) {
     free(c);
   }
 };
+
+nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c) {
+  nbt_node* sections = nbt_find_by_name(node, "Sections");
+  uint8_t x = 0;
+  uint8_t z = 0;
+  uint8_t y = 0;
+  struct list_head* pos;
+  list_for_each(pos, &sections->payload.tag_list->entry) {
+    const struct nbt_list* entry = list_entry(pos, const struct nbt_list, entry);
+    nbt_node* blocks_a = nbt_find_by_name(entry->data, "Blocks");
+    nbt_node* data_a = nbt_find_by_name(entry->data, "Data");
+    if (blocks_a && data_a && blocks_a->type == TAG_BYTE_ARRAY && data_a->type == TAG_BYTE_ARRAY
+      && blocks_a->payload.tag_byte_array.length == 4096
+      && data_a->payload.tag_byte_array.length == 2048) {
+      memcpy(blocks_a->payload.tag_byte_array.data, c->blocks[y], blocks_a->payload.tag_byte_array.length);
+      size_t i;
+      for (i = 0; i < blocks_a->payload.tag_byte_array.length; i += 2) {
+        int8_t data = c->data[y][z][x];
+        if (++x == CHUNK_WIDTH) {
+          if (++z == CHUNK_LENGTH) {
+            z = 0;
+            y++;
+          }
+          x = 0;
+        }
+        data |= (c->data[y][z][x] << 4);
+        data_a->payload.tag_byte_array.data[i/2] = data;
+        if (++x == CHUNK_WIDTH) {
+          if (++z == CHUNK_LENGTH) {
+            z = 0;
+            y++;
+          }
+          x = 0;
+        }
+      }
+    } else
+      return NULL;
+  }
+  nbt_node* biomes_a = nbt_find_by_name(node, "Biomes");
+  if (biomes_a && biomes_a->type == TAG_BYTE_ARRAY && biomes_a->payload.tag_byte_array.length == 256)
+    memcpy(biomes_a->payload.tag_byte_array.data, c->biomes, biomes_a->payload.tag_byte_array.length);
+  nbt_node* inhabitedTime_a = nbt_find_by_name(node, "InhabitedTime");
+  if (inhabitedTime_a && inhabitedTime_a->type == TAG_LONG)
+    inhabitedTime_a->payload.tag_long = c->inhabitedTime;
+  return node;
+};
