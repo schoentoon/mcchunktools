@@ -144,5 +144,11 @@ nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c) {
   nbt_node* inhabitedTime_a = nbt_find_by_name(node, "InhabitedTime");
   if (inhabitedTime_a && inhabitedTime_a->type == TAG_LONG)
     inhabitedTime_a->payload.tag_long = c->inhabitedTime;
+  nbt_node* xPos = nbt_find_by_name(node, "xPos");
+  if (xPos && xPos->type == TAG_INT)
+    xPos->payload.tag_int = c->x;
+  nbt_node* zPos = nbt_find_by_name(node, "zPos");
+  if (zPos && zPos->type == TAG_INT)
+    zPos->payload.tag_int = c->z;
   return node;
 };
