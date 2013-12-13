@@ -20,7 +20,7 @@ bin:
 bin/test1: bin test1.c
 	$(CC) $(CFLAGS) $(INC) -o bin/test1 test1.c ../lib/libmcchunk.a ../cNBT/libnbt.a -lz
 	$(VALGRIND) $(VALGRIND_OPTS) ./bin/test1
-	$(CXX) $(CFLAGS) $(INC) -o bin/test1 test1.c ../lib/libmcchunk.a ../cNBT/libnbt.a -lz
+	$(CXX) $(CFLAGS) $(INC) -o bin/test1 test1.cpp ../lib/libmcchunk.a ../cNBT/libnbt.a -lz
 	$(VALGRIND) $(VALGRIND_OPTS) ./bin/test1
 
 clean:
