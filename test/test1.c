@@ -50,13 +50,12 @@ int main(int argc, char** argv) {
   insist(reg_biomes[2] == 30972, "Expected 30972 desert biomes in all of these chunks, got %d", reg_biomes[2]);
 
   chunk* c = get_chunk(region, chunkx, chunkz, GET_TILE_ENTITIES|GET_ENTITIES);
+  insist(c, "get_chunk returned NULL");
 
   insist(c->tile_entities != NULL, "Requested tile entities but we didn't get them?");
   insist(c->entities != NULL, "Requested entities but we didn't get them?");
 
   insist(c->inhabitedTime == 65, "We expected inhabited time to be 65, not %ld", c->inhabitedTime);
-
-  insist(c, "get_chunk returned NULL");
 
   insist(c->blocks[56][1][2] == 95 && c->data[56][1][2] == 15, "Expected black stained glass at x:2, z:1, y:56");
 
@@ -87,6 +86,12 @@ int main(int argc, char** argv) {
 
   insist(analyze_biomes[2] == 252, "Got %hhu blocks with a desert biome, expected 252", analyze_biomes[2]);
   insist(analyze_biomes[17] == 4, "Got %hhu blocks with a desert hills biome, expected 4", analyze_biomes[17]);
+
+  nbt_node* raw_chunk = get_raw_chunk(region, chunkx, chunkz);
+  insist(raw_chunk, "get_raw_chunk returned NULL");
+  int ret = write_chunk(region, chunkx, chunkz, raw_chunk);
+  insist(ret == 0, "write_chunk returned non-zero %d", ret);
+  nbt_free(raw_chunk);
 
   free_region(region);
   return 0;
