@@ -164,24 +164,32 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* raw, chunk
   if (numSectors == 0)
     return -3;
   uint32_t sectorStart = offset >> 8;
-  FILE* f = fopen(region->filename, "rb+");
-  if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
-    struct buffer buf = nbt_dump_compressed(raw, STRAT_INFLATE);
-    uint32_t size = htobe32(buf.len);
-    if (fwrite(&size, 1, sizeof(uint32_t), f) != sizeof(uint32_t))
-      goto error;
-    static const char COMPRESSION = 2;
-    if (fwrite(&COMPRESSION, 1, sizeof(COMPRESSION), f) != sizeof(COMPRESSION))
-      goto error;
-    if (fwrite(buf.data, 1, buf.len, f) != buf.len)
-      goto error;
-    buffer_free(&buf);
-  };
+  FILE* f = NULL;
+  struct buffer buf = nbt_dump_compressed(raw, STRAT_INFLATE);
+  uint8_t sectorsNeeded = (buf.len + 5) / SECTOR_BYTES + 1;
+  if (sectorStart != 0 && numSectors >= sectorsNeeded) {
+    f = fopen(region->filename, "rb+");
+    if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
+      uint32_t size = htobe32(buf.len);
+      if (fwrite(&size, 1, sizeof(uint32_t), f) != sizeof(uint32_t))
+        goto error;
+      static const char COMPRESSION = 2;
+      if (fwrite(&COMPRESSION, 1, sizeof(COMPRESSION), f) != sizeof(COMPRESSION))
+        goto error;
+      if (fwrite(buf.data, 1, buf.len, f) != buf.len)
+        goto error;
+    };
+    goto success;
+  }
+error:
+  if (f)
+    fclose(f);
+  buffer_free(&buf);
+  return 1;
+success:
+  buffer_free(&buf);
   fclose(f);
   return 0;
-error:
-  fclose(f);
-  return 1;
 };
 
 size_t determine_region_file(char* buf, size_t len, int32_t cx, int32_t cz) {
