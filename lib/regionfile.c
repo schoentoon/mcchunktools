@@ -143,11 +143,18 @@ nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
   return output;
 };
 
-int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* chunk) {
-  if (!region)
+extern nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c);
+
+int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* raw, chunk* chunk) {
+  if (region == NULL)
     return -1;
-  if (!chunk)
+  if (raw == NULL)
     return -1;
+  if (chunk != NULL) {
+    raw = new_chunk_data_to_nbt(raw, chunk);
+    if (raw == NULL)
+      return -1;
+  }
   cx &= 0x1f;
   cz &= 0x1f;
   uint32_t offset = region->offsets[cx + cz * 32];
@@ -157,9 +164,9 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* chunk) {
   if (numSectors == 0)
     return -3;
   uint32_t sectorStart = offset >> 8;
-  FILE* f = fopen(region->filename, "rb");
-  if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET)) {
-    struct buffer buf = nbt_dump_compressed(chunk, STRAT_INFLATE);
+  FILE* f = fopen(region->filename, "rb+");
+  if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
+    struct buffer buf = nbt_dump_compressed(raw, STRAT_INFLATE);
     uint32_t size = htobe32(buf.len);
     if (fwrite(&size, 1, sizeof(uint32_t), f) != sizeof(uint32_t))
       goto error;

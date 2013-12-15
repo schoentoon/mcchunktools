@@ -38,6 +38,7 @@ void analyze_biomes_func(chunk* c, void* context) {
 int main(int argc, char** argv) {
   int32_t chunkx = 0, chunkz = 0;
   regionfile* region = open_regionfile("testdata/r.0.0.mca");
+  insist(region, "write_testdata/r.0.0.mca failed to open..");
 
   insist(count_chunks(region) == 121, "Expected 121 chunks in our test file, got %zu, did our testfile change?", count_chunks(region));
   insist(region_contains_chunk(region, chunkx, chunkz), "Our test region file doesn't contain chunk 0,0");
@@ -89,10 +90,27 @@ int main(int argc, char** argv) {
 
   nbt_node* raw_chunk = get_raw_chunk(region, chunkx, chunkz);
   insist(raw_chunk, "get_raw_chunk returned NULL");
-  int ret = write_chunk(region, chunkx, chunkz, raw_chunk);
+  c = nbt_to_chunk(raw_chunk, 0);
+  insist(c, "get_chunk returned NULL");
+  free_region(region);
+
+  for (x = 0; x < 16; x++) {
+    for (z = 0; z < 16; z++) {
+      for (y = 0; y < 255; y++) {
+        if (c->blocks[y][z][x] == 24) {
+          c->blocks[y][z][x] = 57;
+          c->data[y][z][x] = 0;
+        }
+      }
+    }
+  }
+  regionfile* write_region = open_regionfile("write_testdata/r.0.0.mca");
+  insist(write_region, "write_testdata/r.0.0.mca failed to open..");
+  int ret = write_chunk(write_region, chunkx, chunkz, raw_chunk, c);
   insist(ret == 0, "write_chunk returned non-zero %d", ret);
   nbt_free(raw_chunk);
+  free_chunk(c);
+  free_region(write_region);
 
-  free_region(region);
   return 0;
 };
