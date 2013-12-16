@@ -38,6 +38,7 @@ extern "C" {
 typedef struct {
   uint32_t offsets[SECTOR_INTS];
   uint32_t timestamps[SECTOR_INTS];
+  unsigned char* freeSectors; /* Dynamic array, 0x00 terminated. 1 is free sector, otherwise is used sector */
   char* filename;
 } regionfile;
 

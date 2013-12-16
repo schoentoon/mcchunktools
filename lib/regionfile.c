@@ -19,8 +19,24 @@
 
 #include <string.h>
 #include <endian.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 regionfile* open_regionfile(char* filename) {
+  struct stat st;
+  if (stat(filename, &st) != 0)
+    return NULL;
+  size_t filesize = st.st_size;
+  if (filesize & 0xFFF) {
+    filesize = (filesize | 0xFFF) + 1;
+    if (truncate(filename, filesize) != 0)
+      return NULL;
+  }
+  if (filesize == 0) {
+    filesize = SECTOR_BYTES * 2;
+    if (truncate(filename, filesize) != 0)
+      return NULL;
+  }
   FILE* f = fopen(filename, "rb");
   if (f) {
     regionfile* region = malloc(sizeof(regionfile));
@@ -31,6 +47,24 @@ regionfile* open_regionfile(char* filename) {
       region->offsets[i] = be32toh(region->offsets[i]);
     if (fread(region->timestamps, 4, SECTOR_INTS, f) != SECTOR_INTS)
       goto error;
+    uint32_t freeSectorsLength = filesize/SECTOR_BYTES;
+    region->freeSectors = malloc(sizeof(unsigned char)*(freeSectorsLength+1));
+    memset(region->freeSectors, 0x01, freeSectorsLength);
+    region->freeSectors[freeSectorsLength] = 0x00;
+    region->freeSectors[0] = 0x02; /* The first 2 sectors are the offsets and timestamps so are never free! */
+    region->freeSectors[1] = 0x02;
+    for (i = 0; i < SECTOR_INTS; i++) {
+      uint32_t sector = region->offsets[i] >> 8;
+      uint32_t count = region->offsets[i] & 0xFF;
+      uint32_t j;
+      for (j = sector; j < (sector + count); j++) {
+        if (j >= freeSectorsLength) {
+          /* If we reach this we should actually call a repair like function which we don't have yet. */
+          break;
+        }
+        region->freeSectors[j] = 0x02;
+      };
+    };
     region->filename = strdup(filename);
     fclose(f);
     return region;
@@ -102,6 +136,7 @@ void for_each_chunk(regionfile* region, chunk_func function, void* context) {
 
 void free_region(regionfile* region) {
   if (region) {
+    free(region->freeSectors);
     free(region->filename);
     free(region);
   }
