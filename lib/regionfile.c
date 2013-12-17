@@ -201,7 +201,9 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* raw, chunk
   uint32_t sectorStart = offset >> 8;
   FILE* f = NULL;
   struct buffer buf = nbt_dump_compressed(raw, STRAT_INFLATE);
-  uint8_t sectorsNeeded = (buf.len + 5) / SECTOR_BYTES + 1;
+  uint16_t sectorsNeeded = (buf.len + 5) / SECTOR_BYTES + 1;
+  if (sectorsNeeded >= 256)
+    goto error;
   if (sectorStart != 0 && numSectors >= sectorsNeeded) {
     f = fopen(region->filename, "rb+");
     if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
