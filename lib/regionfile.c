@@ -153,6 +153,17 @@ int region_contains_chunk(regionfile* region, int32_t cx, int32_t cz) {
   return 1;
 };
 
+uint8_t region_chunk_sector_count(regionfile* region, int32_t cx, int32_t cz) {
+  if (!region)
+    return 0;
+  cx &= 0x1f;
+  cz &= 0x1f;
+  uint32_t offset = region->offsets[cx + cz * 32];
+  if (offset == 0)
+    return 0;
+  return (uint8_t) offset & 0xff;
+};
+
 nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
   if (!region)
     return NULL;

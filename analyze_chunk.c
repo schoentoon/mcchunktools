@@ -65,8 +65,10 @@ int main(int argc, char** argv) {
     char buf[BUFSIZ];
     if (determine_region_file(buf, sizeof(buf), chunkx, chunkz) > 0)
       fprintf(stderr, "I suggest you look in \"%s\" instead.\n", buf);
+    free_region(region);
     return 1;
   }
+  fprintf(stderr, "Chunk %d, %d consists of %d internal sectors.\n", chunkx, chunkz, region_chunk_sector_count(region, chunkx, chunkz));
   chunk* c = get_chunk(region, chunkx, chunkz, 0);
   if (c) {
     uint64_t analyze[256][16];

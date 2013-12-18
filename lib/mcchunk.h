@@ -109,6 +109,11 @@ void for_each_chunk(regionfile* region, chunk_func function, void* context);
  */
 int region_contains_chunk(regionfile* region, int32_t cx, int32_t cz);
 
+/** Return the amount of internal sectors this chunk consists of,
+ * will return 0 on error.
+ */
+uint8_t region_chunk_sector_count(regionfile* region, int32_t cx, int32_t cz);
+
 /** Returns the nbt structure for this particular chunk
  * @see region_contains_chunk @see chunk_from_coord
  */
