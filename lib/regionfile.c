@@ -75,6 +75,24 @@ error:
   return NULL;
 };
 
+int __region_write_offsets(regionfile* region) {
+  if (!region)
+    return -1;
+  FILE* f = fopen(region->filename, "rb+");
+  if (!f)
+    return -2;
+  uint32_t offsets[SECTOR_INTS];
+  size_t i;
+  for (i = 0; i < SECTOR_INTS; i++)
+    offsets[i] = htobe32(region->offsets[i]);
+  if (fwrite(offsets, 4, SECTOR_INTS, f) != SECTOR_INTS) {
+    fclose(f);
+    return -3;
+  }
+  fclose(f);
+  return 0;
+}
+
 size_t count_chunks(regionfile* region) {
   if (region) {
     size_t i, output = 0;
