@@ -163,5 +163,18 @@ nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c) {
       }
     }
   }
+  if (c->tile_entities) {
+    nbt_node* tentities = nbt_find_by_name(node, "TileEntities");
+    if (tentities && tentities->type == TAG_LIST) {
+      const struct list_head* cursor;
+      list_for_each(cursor, &c->tile_entities->payload.tag_list->entry) {
+        const struct nbt_list* entry = list_entry(cursor, const struct nbt_list, entry);
+        nbt_node* clone = nbt_clone(entry->data);
+        struct nbt_list* new = malloc(sizeof(struct nbt_list));
+        new->data = clone;
+        list_add_tail(&new->entry, &tentities->payload.tag_list->entry);
+      }
+    }
+  }
   return node;
 };
