@@ -150,5 +150,18 @@ nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c) {
   nbt_node* zPos = nbt_find_by_name(node, "zPos");
   if (zPos && zPos->type == TAG_INT)
     zPos->payload.tag_int = c->z;
+  if (c->entities) {
+    nbt_node* entities = nbt_find_by_name(node, "Entities");
+    if (entities && entities->type == TAG_LIST) {
+      const struct list_head* cursor;
+      list_for_each(cursor, &c->entities->payload.tag_list->entry) {
+        const struct nbt_list* entry = list_entry(cursor, const struct nbt_list, entry);
+        nbt_node* clone = nbt_clone(entry->data);
+        struct nbt_list* new = malloc(sizeof(struct nbt_list));
+        new->data = clone;
+        list_add_tail(&new->entry, &entities->payload.tag_list->entry);
+      }
+    }
+  }
   return node;
 };
