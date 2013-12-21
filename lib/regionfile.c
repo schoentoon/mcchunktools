@@ -40,6 +40,13 @@ regionfile* open_regionfile(char* filename) {
   FILE* f = fopen(filename, "rb");
   if (f) {
     regionfile* region = malloc(sizeof(regionfile));
+    {
+      char* fn = filename;
+      while (sscanf(fn, "r.%d.%d.mca", &region->x, &region->z) != 2) {
+        if (*++fn == 0x00)
+          goto error;
+      }
+    }
     if (fread(region->offsets, 4, SECTOR_INTS, f) != SECTOR_INTS)
       goto error;
     size_t i;

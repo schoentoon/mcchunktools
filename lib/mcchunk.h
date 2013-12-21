@@ -40,6 +40,7 @@ typedef struct {
   uint32_t timestamps[SECTOR_INTS];
   unsigned char* freeSectors; /* Dynamic array, 0x00 terminated. 1 is free sector, otherwise is used sector */
   char* filename;
+  int32_t x, z;
 } regionfile;
 
 #define CHUNK_WIDTH 16

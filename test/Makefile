@@ -25,6 +25,7 @@ bin/test1: bin test1.c
 
 bin/test_bigwrite: bin test_bigwrite.c
 	$(CC) $(CFLAGS) $(INC) -o bin/test_bigwrite test_bigwrite.c ../lib/libmcchunk.a ../cNBT/libnbt.a -lz
+	$(VALGRIND) $(VALGRIND_OPTS) ./bin/test_bigwrite
 
 clean:
 	rm -rf bin/
