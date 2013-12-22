@@ -21,6 +21,7 @@
 #include <endian.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
 
 regionfile* open_regionfile(char* filename) {
   struct stat st;
@@ -54,6 +55,8 @@ regionfile* open_regionfile(char* filename) {
       region->offsets[i] = be32toh(region->offsets[i]);
     if (fread(region->timestamps, 4, SECTOR_INTS, f) != SECTOR_INTS)
       goto error;
+    for (i = 0; i < SECTOR_INTS; i++)
+      region->timestamps[i] = be32toh(region->timestamps[i]);
     uint32_t freeSectorsLength = filesize/SECTOR_BYTES;
     region->freeSectors = malloc(sizeof(unsigned char)*(freeSectorsLength+1));
     memset(region->freeSectors, 0x01, freeSectorsLength);
@@ -93,6 +96,28 @@ int __region_write_offsets(regionfile* region) {
   for (i = 0; i < SECTOR_INTS; i++)
     offsets[i] = htobe32(region->offsets[i]);
   if (fwrite(offsets, 4, SECTOR_INTS, f) != SECTOR_INTS) {
+    fclose(f);
+    return -3;
+  }
+  fclose(f);
+  return 0;
+}
+
+int __region_write_timestamps(regionfile* region) {
+  if (!region)
+    return -1;
+  FILE* f = fopen(region->filename, "rb+");
+  if (!f)
+    return -2;
+  if (fseek(f, SECTOR_INTS*4, SEEK_SET) != 0) {
+    fclose(f);
+    return -2;
+  }
+  uint32_t timestamps[SECTOR_INTS];
+  size_t i;
+  for (i = 0; i < SECTOR_INTS; i++)
+    timestamps[i] = htobe32(region->timestamps[i]);
+  if (fwrite(timestamps, 4, SECTOR_INTS, f) != SECTOR_INTS) {
     fclose(f);
     return -3;
   }
@@ -327,6 +352,8 @@ error:
 success:
   buffer_free(&buf);
   fclose(f);
+  region->timestamps[cx + cz * 32] = time(NULL);
+  __region_write_timestamps(region);
   return 0;
 };
 
