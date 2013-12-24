@@ -94,6 +94,10 @@ int main(int argc, char** argv) {
   insist(c, "get_chunk returned NULL");
   free_region(region);
 
+  region = open_regionfile("testdata/r.10.10.mca");
+  insist(region, "testdata/r.10.10.mca failed to create..");
+  free_region(region);
+
   for (x = 0; x < 16; x++) {
     for (z = 0; z < 16; z++) {
       for (y = 0; y < 255; y++) {

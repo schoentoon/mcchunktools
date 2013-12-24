@@ -23,10 +23,40 @@
 #include <unistd.h>
 #include <time.h>
 
+int __region_write_offsets(regionfile* region);
+int __region_write_timestamps(regionfile* region);
+
 regionfile* open_regionfile(char* filename) {
+  FILE* f = NULL;
+  regionfile* region = NULL;
   struct stat st;
-  if (stat(filename, &st) != 0)
-    return NULL;
+  if (stat(filename, &st) != 0) {
+    f = fopen(filename, "a");
+    if (!f)
+      return NULL;
+    fclose(f);
+    f = NULL;
+    region = malloc(sizeof(regionfile));
+    bzero(region, sizeof(regionfile));
+    region->filename = strdup(filename);
+    if (__region_write_offsets(region) != 0 || __region_write_timestamps(region) != 0) {
+      free_region(region);
+      return NULL;
+    }
+    {
+      char* fn = filename;
+      while (sscanf(fn, "r.%d.%d.mca", &region->x, &region->z) != 2) {
+        if (*++fn == 0x00)
+          goto error;
+      }
+    }
+    region->freeSectors = malloc(sizeof(unsigned char)*(2+1));
+    memset(region->freeSectors, 0x01, 2);
+    region->freeSectors[2] = 0x00;
+    region->freeSectors[0] = 0x02;
+    region->freeSectors[1] = 0x02;
+    return region;
+  }
   size_t filesize = st.st_size;
   if (filesize & 0xFFF) {
     filesize = (filesize | 0xFFF) + 1;
@@ -38,9 +68,10 @@ regionfile* open_regionfile(char* filename) {
     if (truncate(filename, filesize) != 0)
       return NULL;
   }
-  FILE* f = fopen(filename, "rb");
+  f = fopen(filename, "rb");
   if (f) {
-    regionfile* region = malloc(sizeof(regionfile));
+    region = malloc(sizeof(regionfile));
+    bzero(region, sizeof(regionfile));
     {
       char* fn = filename;
       while (sscanf(fn, "r.%d.%d.mca", &region->x, &region->z) != 2) {
@@ -79,7 +110,7 @@ regionfile* open_regionfile(char* filename) {
     fclose(f);
     return region;
 error:
-    free(region);
+    free_region(region);
     fclose(f);
   }
   return NULL;
@@ -186,8 +217,10 @@ void for_each_chunk(regionfile* region, chunk_func function, void* context) {
 
 void free_region(regionfile* region) {
   if (region) {
-    free(region->freeSectors);
-    free(region->filename);
+    if (region->freeSectors)
+      free(region->freeSectors);
+    if (region->filename)
+      free(region->filename);
     free(region);
   }
 };
