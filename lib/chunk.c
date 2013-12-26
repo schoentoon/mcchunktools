@@ -101,6 +101,15 @@ void free_chunk(chunk* c) {
   }
 };
 
+extern unsigned char _binary_blob_empty_chunk_gz_start;
+extern unsigned char _binary_blob_empty_chunk_gz_end;
+
+nbt_node* get_empty_raw_chunk() {
+  size_t size = (&_binary_blob_empty_chunk_gz_end) - (&_binary_blob_empty_chunk_gz_start);
+  printf("%d\n", (int) size);
+  return nbt_parse_compressed(&_binary_blob_empty_chunk_gz_start, size);
+};
+
 nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c) {
   nbt_node* sections = nbt_find_by_name(node, "Sections");
   uint8_t x = 0;
