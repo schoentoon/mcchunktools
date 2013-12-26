@@ -2,6 +2,7 @@ CFLAGS  := -Wall -O3 -mtune=native -g
 CC      := gcc
 OBJCOPY := objcopy
 INC     := -I../cNBT
+TARGET  := $(shell ld --print-output-format)
 
 all: libmcchunk.a
 
@@ -18,7 +19,7 @@ chunk.o: chunk.c mcchunk.h
 	$(CC) $(CFLAGS) $(INC) -c -o chunk.o chunk.c
 
 empty_chunk.o: blob/empty.chunk.gz
-	$(OBJCOPY) --input binary --output elf64-x86-64 --binary-architecture i386 blob/empty.chunk.gz empty_chunk.o
+	$(OBJCOPY) --input binary --output $(TARGET) -S --binary-architecture i386 blob/empty.chunk.gz empty_chunk.o
 
 libmcchunk.a: regionfile.o blockdb.o chunk.o empty_chunk.o
 	ar -rcs libmcchunk.a regionfile.o blockdb.o chunk.o empty_chunk.o
