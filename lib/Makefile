@@ -19,7 +19,7 @@ chunk.o: chunk.c mcchunk.h
 	$(CC) $(CFLAGS) $(INC) -c -o chunk.o chunk.c
 
 empty_chunk.o: blob/empty.chunk.gz
-	$(OBJCOPY) --input binary --output $(TARGET) -S --binary-architecture i386 blob/empty.chunk.gz empty_chunk.o
+	$(OBJCOPY) --input binary --output $(TARGET) --binary-architecture i386 blob/empty.chunk.gz empty_chunk.o
 
 libmcchunk.a: regionfile.o blockdb.o chunk.o empty_chunk.o
 	ar -rcs libmcchunk.a regionfile.o blockdb.o chunk.o empty_chunk.o
