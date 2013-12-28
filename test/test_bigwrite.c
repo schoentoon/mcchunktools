@@ -31,9 +31,7 @@ int main(int argc, char** argv) {
   regionfile* region = open_regionfile("testdata/r.0.0.mca");
   insist(region, "write_testdata/r.0.0.mca failed to open..");
 
-  nbt_node* raw_chunk = get_raw_chunk(region, chunkx, chunkz);
-  insist(raw_chunk, "get_raw_chunk returned NULL");
-  chunk* c = nbt_to_chunk(raw_chunk, GET_ENTITIES);
+  chunk* c = get_chunk(region, chunkx, chunkz, GET_ENTITIES);
   insist(c, "get_chunk returned NULL");
   free_region(region);
 
@@ -59,9 +57,8 @@ int main(int argc, char** argv) {
 
   regionfile* write_region = open_regionfile("write_testdata/r.0.0.mca");
   insist(write_region, "write_testdata/r.0.0.mca failed to open..");
-  int ret = write_chunk(write_region, chunkx, chunkz, raw_chunk, c);
+  int ret = write_chunk(write_region, chunkx, chunkz, c);
   insist(ret == 0, "write_chunk returned non-zero %d", ret);
-  nbt_free(raw_chunk);
   free_chunk(c);
   free_region(write_region);
   return 0;

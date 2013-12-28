@@ -106,11 +106,11 @@ extern unsigned char _binary_blob_empty_chunk_gz_end;
 
 nbt_node* get_empty_raw_chunk() {
   size_t size = (&_binary_blob_empty_chunk_gz_end) - (&_binary_blob_empty_chunk_gz_start);
-  printf("%d\n", (int) size);
   return nbt_parse_compressed(&_binary_blob_empty_chunk_gz_start, size);
 };
 
-nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c) {
+nbt_node* new_chunk_data_to_nbt(chunk* c) {
+  nbt_node* node = get_empty_raw_chunk();
   nbt_node* sections = nbt_find_by_name(node, "Sections");
   uint8_t x = 0;
   uint8_t z = 0;
@@ -165,9 +165,8 @@ nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c) {
       const struct list_head* cursor;
       list_for_each(cursor, &c->entities->payload.tag_list->entry) {
         const struct nbt_list* entry = list_entry(cursor, const struct nbt_list, entry);
-        nbt_node* clone = nbt_clone(entry->data);
         struct nbt_list* new = malloc(sizeof(struct nbt_list));
-        new->data = clone;
+        new->data = nbt_clone(entry->data);
         list_add_tail(&new->entry, &entities->payload.tag_list->entry);
       }
     }

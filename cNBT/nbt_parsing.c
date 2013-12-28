@@ -650,9 +650,9 @@ static nbt_status dump_list_binary(const struct nbt_list* list, struct buffer* b
     if(len > 2147483647 /* INT_MAX */)
         return NBT_ERR;
     
-    assert(type != TAG_INVALID);
+    /*assert(type != TAG_INVALID);
     if(type == TAG_INVALID)
-        return NBT_ERR;
+        return NBT_ERR;*/
 
     {
         int8_t _type = (int8_t)type;

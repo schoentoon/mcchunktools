@@ -272,18 +272,13 @@ nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
   return output;
 };
 
-extern nbt_node* new_chunk_data_to_nbt(nbt_node* node, chunk* c);
+extern nbt_node* new_chunk_data_to_nbt(chunk* c);
 
-int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* raw, chunk* chunk) {
+int write_chunk(regionfile* region, int32_t cx, int32_t cz, chunk* chunk) {
   if (region == NULL)
     return -1;
-  if (raw == NULL)
+  if (chunk == NULL)
     return -1;
-  if (chunk != NULL) {
-    raw = new_chunk_data_to_nbt(raw, chunk);
-    if (raw == NULL)
-      return -1;
-  }
   cx &= 0x1f;
   cz &= 0x1f;
   uint32_t offset = region->offsets[cx + cz * 32];
@@ -292,6 +287,9 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* raw, chunk
   uint32_t numSectors = offset & 0xff;
   if (numSectors == 0)
     return -3;
+  nbt_node* raw = new_chunk_data_to_nbt(chunk);
+  if (raw == NULL)
+    return -1;
   uint32_t sectorStart = offset >> 8;
   FILE* f = NULL;
   struct buffer buf = nbt_dump_compressed(raw, STRAT_INFLATE);
@@ -378,11 +376,13 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* raw, chunk
     }
   }
 error:
+  nbt_free(raw);
   if (f)
     fclose(f);
   buffer_free(&buf);
   return 1;
 success:
+  nbt_free(raw);
   buffer_free(&buf);
   fclose(f);
   region->timestamps[cx + cz * 32] = time(NULL);

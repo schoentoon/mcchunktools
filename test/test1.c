@@ -74,7 +74,6 @@ int main(int argc, char** argv) {
         analyze[c->blocks[y][z][x]][c->data[y][z][x]]++;
     }
   }
-  free_chunk(c);
 
   insist(analyze[0][0] == 50940, "Got %zu air blocks, expected 50940", analyze[0][0]);
   insist(analyze[1][0] == 768, "Got %zu stone blocks, expected 768", analyze[1][0]);
@@ -88,10 +87,6 @@ int main(int argc, char** argv) {
   insist(analyze_biomes[2] == 252, "Got %hhu blocks with a desert biome, expected 252", analyze_biomes[2]);
   insist(analyze_biomes[17] == 4, "Got %hhu blocks with a desert hills biome, expected 4", analyze_biomes[17]);
 
-  nbt_node* raw_chunk = get_raw_chunk(region, chunkx, chunkz);
-  insist(raw_chunk, "get_raw_chunk returned NULL");
-  c = nbt_to_chunk(raw_chunk, 0);
-  insist(c, "get_chunk returned NULL");
   free_region(region);
 
   region = open_regionfile("testdata/r.10.10.mca");
@@ -110,9 +105,8 @@ int main(int argc, char** argv) {
   }
   regionfile* write_region = open_regionfile("write_testdata/r.0.0.mca");
   insist(write_region, "write_testdata/r.0.0.mca failed to open..");
-  int ret = write_chunk(write_region, chunkx, chunkz, raw_chunk, c);
+  int ret = write_chunk(write_region, chunkx, chunkz, c);
   insist(ret == 0, "write_chunk returned non-zero %d", ret);
-  nbt_free(raw_chunk);
   free_chunk(c);
   free_region(write_region);
 

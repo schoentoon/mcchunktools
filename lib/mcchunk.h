@@ -136,11 +136,8 @@ chunk* nbt_to_chunk(nbt_node* node, uint16_t flags);
 size_t determine_region_file(char* buf, size_t len, int32_t cx, int32_t cz);
 
 /** Writes the chunk to the regionfile at position cx, cz
- * at this point this implementation is very very lacking.
- * It can only write chunks that were already in the file for example.
- * I recommend to not use it as of now.
  */
-int write_chunk(regionfile* region, int32_t cx, int32_t cz, nbt_node* raw, chunk* c);
+int write_chunk(regionfile* region, int32_t cx, int32_t cz, chunk* c);
 
 /** Initialize the block names database you must call
  * this once before using @see get_block_name
