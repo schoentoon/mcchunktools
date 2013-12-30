@@ -41,6 +41,8 @@ typedef struct {
   unsigned char* freeSectors; /* Dynamic array, 0x00 terminated. 1 is free sector, otherwise is used sector */
   char* filename;
   int32_t x, z;
+  FILE* file;
+  unsigned char keepopen : 1;
 } regionfile;
 
 #define CHUNK_WIDTH 16

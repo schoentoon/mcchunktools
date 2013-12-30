@@ -119,7 +119,16 @@ error:
 int __region_write_offsets(regionfile* region) {
   if (!region)
     return -1;
-  FILE* f = fopen(region->filename, "rb+");
+  FILE* f;
+  if (region->keepopen == 1) {
+    if (region->file)
+      f = region->file;
+    else {
+      f = fopen(region->filename, "rb+");
+      region->file = f;
+    }
+  } else
+    f = fopen(region->filename, "rb+");
   if (!f)
     return -2;
   uint32_t offsets[SECTOR_INTS];
@@ -127,17 +136,28 @@ int __region_write_offsets(regionfile* region) {
   for (i = 0; i < SECTOR_INTS; i++)
     offsets[i] = htobe32(region->offsets[i]);
   if (fwrite(offsets, 4, SECTOR_INTS, f) != SECTOR_INTS) {
-    fclose(f);
+    if (region->file != f)
+      fclose(f);
     return -3;
   }
-  fclose(f);
+  if (region->file != f)
+    fclose(f);
   return 0;
 }
 
 int __region_write_timestamps(regionfile* region) {
   if (!region)
     return -1;
-  FILE* f = fopen(region->filename, "rb+");
+  FILE* f;
+  if (region->keepopen == 1) {
+    if (region->file)
+      f = region->file;
+    else {
+      f = fopen(region->filename, "rb+");
+      region->file = f;
+    }
+  } else
+    f = fopen(region->filename, "rb+");
   if (!f)
     return -2;
   if (fseek(f, SECTOR_INTS*4, SEEK_SET) != 0) {
@@ -149,10 +169,12 @@ int __region_write_timestamps(regionfile* region) {
   for (i = 0; i < SECTOR_INTS; i++)
     timestamps[i] = htobe32(region->timestamps[i]);
   if (fwrite(timestamps, 4, SECTOR_INTS, f) != SECTOR_INTS) {
-    fclose(f);
+    if (region->file != f)
+      fclose(f);
     return -3;
   }
-  fclose(f);
+  if (region->file != f)
+    fclose(f);
   return 0;
 }
 
@@ -171,7 +193,16 @@ size_t count_chunks(regionfile* region) {
 void for_each_chunk_raw(regionfile* region, raw_chunk_func function, void* context) {
   if (!region || !function)
     return;
-  FILE* f = fopen(region->filename, "rb");
+  FILE* f;
+  if (region->keepopen == 1) {
+    if (region->file)
+      f = region->file;
+    else {
+      f = fopen(region->filename, "rb+");
+      region->file = f;
+    }
+  } else
+    f = fopen(region->filename, "rb+");
   size_t i;
   for (i = 0; i < SECTOR_INTS; i++) {
     uint32_t offset = region->offsets[i];
@@ -191,7 +222,8 @@ void for_each_chunk_raw(regionfile* region, raw_chunk_func function, void* conte
       }
     }
   }
-  fclose(f);
+  if (region->file != f)
+    fclose(f);
 };
 
 struct __for_each_chunk_struct {
@@ -221,6 +253,8 @@ void free_region(regionfile* region) {
       free(region->freeSectors);
     if (region->filename)
       free(region->filename);
+    if (region->file)
+      fclose(region->file);
     free(region);
   }
 };
@@ -259,7 +293,16 @@ nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
   if (numSectors == 0)
     return NULL;
   uint32_t sectorStart = offset >> 8;
-  FILE* f = fopen(region->filename, "rb");
+  FILE* f;
+  if (region->keepopen == 1) {
+    if (region->file)
+      f = region->file;
+    else {
+      f = fopen(region->filename, "rb+");
+      region->file = f;
+    }
+  } else
+    f = fopen(region->filename, "rb+");
   nbt_node* output = NULL;
   if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
     unsigned char buf[numSectors*SECTOR_BYTES];
@@ -268,7 +311,8 @@ nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
       output = nbt_parse_compressed(buf+5, size); /* Fifth byte is the compression algorithm */
     }                                             /* But we don't need that as cNBT will figure that out */
   }
-  fclose(f);
+  if (region->file != f)
+    fclose(f);
   return output;
 };
 
@@ -291,10 +335,18 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, chunk* chunk) {
   if (raw == NULL)
     return -1;
   uint32_t sectorStart = offset >> 8;
-  FILE* f = NULL;
+  FILE* f;
+  if (region->keepopen == 1) {
+    if (region->file)
+      f = region->file;
+    else {
+      f = fopen(region->filename, "rb+");
+      region->file = f;
+    }
+  } else
+    f = fopen(region->filename, "rb+");
   struct buffer buf = nbt_dump_compressed(raw, STRAT_INFLATE);
   uint16_t sectorsNeeded = (buf.len + 5) / SECTOR_BYTES + 1;
-  fprintf(stderr, "requires %d sectors\n", sectorsNeeded);
   if (sectorsNeeded >= 256)
     goto error;
   if (sectorStart != 0 && numSectors >= sectorsNeeded) {
@@ -377,14 +429,15 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, chunk* chunk) {
   }
 error:
   nbt_free(raw);
-  if (f)
+  if (f && region->file != f)
     fclose(f);
   buffer_free(&buf);
   return 1;
 success:
   nbt_free(raw);
   buffer_free(&buf);
-  fclose(f);
+  if (region->file != f)
+    fclose(f);
   region->timestamps[cx + cz * 32] = time(NULL);
   __region_write_timestamps(region);
   return 0;
