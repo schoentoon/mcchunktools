@@ -2,7 +2,7 @@ override CFLAGS  += -Wall -O3 -mtune=native -g
 CC               := gcc
 INC              := -I../cNBT -I../lib
 VALGRIND         := /usr/bin/valgrind
-VALGRIND_OPTS    := --leak-check=full --show-leak-kinds=all
+VALGRIND_OPTS    := --leak-check=full
 
 ifeq ($(CC), gcc)
 	CXX := g++
