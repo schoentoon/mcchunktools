@@ -350,8 +350,7 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, chunk* chunk) {
   if (sectorsNeeded >= 256)
     goto error;
   if (sectorStart != 0 && numSectors >= sectorsNeeded) {
-    f = fopen(region->filename, "rb+");
-    if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) != 0)
+    if (fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) != 0)
       goto error;
     uint32_t size = htobe32(buf.len);
     if (fwrite(&size, 1, sizeof(uint32_t), f) != sizeof(uint32_t))
@@ -384,8 +383,7 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, chunk* chunk) {
       region->offsets[cx + cz * 32] = runStart << 8 | sectorsNeeded;
       if (__region_write_offsets(region) != 0)
         goto error;
-      f = fopen(region->filename, "rb+");
-      if (f && fseek(f, runStart*SECTOR_BYTES, SEEK_SET) != 0)
+      if (fseek(f, runStart*SECTOR_BYTES, SEEK_SET) != 0)
         goto error;
       uint32_t size = htobe32(buf.len);
       if (fwrite(&size, 1, sizeof(uint32_t), f) != sizeof(uint32_t))
@@ -397,8 +395,7 @@ int write_chunk(regionfile* region, int32_t cx, int32_t cz, chunk* chunk) {
         goto error;
       goto success;
     } else {
-      f = fopen(region->filename, "rb+");
-      if (f && fseek(f, 0L, SEEK_END) != 0)
+      if (fseek(f, 0L, SEEK_END) != 0)
         goto error;
       long filesize = ftell(f);
       uint32_t sectorNumber = filesize/SECTOR_BYTES;

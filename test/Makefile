@@ -1,8 +1,8 @@
-CFLAGS  := -Wall -O3 -mtune=native -g $(CFLAGS)
-CC      := gcc
-INC     := -I../cNBT -I../lib
-VALGRIND:= /usr/bin/valgrind
-VALGRIND_OPTS:= --leak-check=full
+override CFLAGS  += -Wall -O3 -mtune=native -g
+CC               := gcc
+INC              := -I../cNBT -I../lib
+VALGRIND         := /usr/bin/valgrind
+VALGRIND_OPTS    := --leak-check=full --show-leak-kinds=all
 
 ifeq ($(CC), gcc)
 	CXX := g++

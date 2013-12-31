@@ -1,8 +1,8 @@
-CFLAGS  := -Wall -O3 -mtune=native -g
-CC      := gcc
-OBJCOPY := objcopy
-INC     := -I../cNBT
-TARGET  := $(shell ld --print-output-format)
+override CFLAGS += -Wall -O3 -mtune=native -g
+CC              := gcc
+OBJCOPY         := objcopy
+INC             := -I../cNBT
+TARGET          := $(shell ld --print-output-format)
 
 all: libmcchunk.a
 
