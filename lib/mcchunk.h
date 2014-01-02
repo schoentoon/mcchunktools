@@ -174,6 +174,43 @@ chunk* get_chunk(regionfile* region, int32_t cx, int32_t cz, uint16_t flags);
  */
 void free_chunk(chunk* c);
 
+typedef struct {
+  char* filename;
+  char* levelname;
+  int64_t seed;
+  uint64_t last_played;
+  uint8_t allowCommands : 1;
+  uint8_t hardcore : 1;
+  uint64_t time;
+  uint64_t daytime;
+  union {
+    int32_t x;
+    int32_t y;
+    int32_t z;
+  } spawn;
+  uint8_t raining : 1;
+  uint8_t thundering : 1;
+  int32_t rainTime;
+  int32_t thunderTime;
+  union {
+    uint8_t commandBlockOutput : 1;
+    uint8_t doDaylightCycle : 1;
+    uint8_t doFireTick : 1;
+    uint8_t doMobLoot : 1;
+    uint8_t doMobSpawning : 1;
+    uint8_t doTileDrops : 1;
+    uint8_t keepInventory : 1;
+    uint8_t mobGriefing : 1;
+    uint8_t naturalRegeneration : 1;
+  } gamerules;
+} level;
+
+/** Open a level.dat file
+ */
+level* open_level(char* filename);
+
+void free_level(level* lvl);
+
 #ifdef __cplusplus
 }
 #endif

@@ -20,7 +20,7 @@ libnbt:
 	$(MAKE) -C cNBT libnbt.a CC="$(CC)" CFLAGS="$(CFLAGS)"
 
 lib/libmcchunk.a:
-	$(MAKE) -C lib CC="$(CC)" CFLAGS="$(CFLAGS)"
+	$(MAKE) -C lib CC="$(CC)"
 
 clean:
 	find -name \*.o -delete
