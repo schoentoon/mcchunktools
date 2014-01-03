@@ -26,6 +26,14 @@
 int main(int argc, char** argv) {
 	level* lvl = open_level("testdata/level.dat");
 	insist(lvl != NULL, "open_level returned NULL anyway..");
+	lvl->hardcore = 1;
+	lvl->gamerules.naturalRegeneration = 0;
+	int ret = write_level(lvl, NULL);
+	insist(ret == 0, "write_level returned %d instead of 0", ret);
+	free_level(lvl);
+	lvl = open_level("testdata/level.dat");
+	insist(lvl != NULL, "open_level returned NULL anyway..");
+	insist(lvl->hardcore == 1, "lvl->hardcore wasn't correctly set to 1? :/");
 	free_level(lvl);
 	return 0;
 }

@@ -108,6 +108,96 @@ error:
   return NULL;
 }
 
+int write_level(level* lvl, char* into) {
+  if (lvl == NULL)
+  	return -1;
+  if (into == NULL)
+  	into = lvl->filename;
+  nbt_node* node = nbt_parse_path(lvl->filename);
+  if (node == NULL)
+  	return -2;
+
+  nbt_node* tmp = NULL;
+
+#define UPDATE_NBT_STR(nbt_path, from) \
+  tmp = nbt_find_by_path(node, nbt_path); \
+  if (tmp && tmp->type == TAG_STRING) { \
+  	free(tmp->payload.tag_string); \
+  	tmp->payload.tag_string = strdup(lvl->from); \
+  } else { goto error; };
+
+#define UPDATE_NBT_LONG(nbt_path, from) \
+  tmp = nbt_find_by_path(node, nbt_path); \
+  if (tmp && tmp->type == TAG_LONG) { \
+  	tmp->payload.tag_long = (long) lvl->from; \
+  } else { goto error; };
+
+#define UPDATE_NBT_BOOL(nbt_path, from) \
+  tmp = nbt_find_by_path(node, nbt_path); \
+  if (tmp && tmp->type == TAG_BYTE) { \
+  	tmp->payload.tag_byte = lvl->from; \
+  } else { goto error; };
+
+#define UPDATE_NBT_INT(nbt_path, from) \
+  tmp = nbt_find_by_path(node, nbt_path); \
+  if (tmp && tmp->type == TAG_INT) { \
+  	tmp->payload.tag_int = lvl->from; \
+  } else { goto error; };
+
+#define UPDATE_NBT_GAMERULE(nbt_path, from) \
+  tmp = nbt_find_by_path(node, nbt_path); \
+  if (tmp && tmp->type == TAG_STRING) { \
+  	free(tmp->payload.tag_string); \
+  	if (lvl->gamerules.from == 1) { \
+  	  tmp->payload.tag_string = strdup("true"); \
+  	} else { \
+  	  tmp->payload.tag_string = strdup("false"); \
+  	}; \
+  } else { goto error; };
+
+  UPDATE_NBT_STR(".Data.LevelName", levelname);
+  UPDATE_NBT_LONG(".Data.RandomSeed", seed);
+  UPDATE_NBT_LONG(".Data.LastPlayed", last_played);
+  UPDATE_NBT_BOOL(".Data.allowCommands", allowCommands);
+  UPDATE_NBT_BOOL(".Data.hardcore", hardcore);
+  UPDATE_NBT_LONG(".Data.Time", time);
+  UPDATE_NBT_LONG(".Data.DayTime", daytime);
+  UPDATE_NBT_INT(".Data.SpawnX", spawn.x);
+  UPDATE_NBT_INT(".Data.SpawnY", spawn.y);
+  UPDATE_NBT_INT(".Data.SpawnZ", spawn.z);
+  UPDATE_NBT_BOOL(".Data.raining", raining);
+  UPDATE_NBT_BOOL(".Data.thundering", thundering);
+  UPDATE_NBT_INT(".Data.rainTime", rainTime);
+  UPDATE_NBT_INT(".Data.thunderTime", thunderTime);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.commandBlockOutput", commandBlockOutput);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.doDaylightCycle", doDaylightCycle);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.doFireTick", doFireTick);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.doMobLoot", doMobLoot);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.doMobSpawning", doMobSpawning);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.doTileDrops", doTileDrops);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.keepInventory", keepInventory);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.mobGriefing", mobGriefing);
+  UPDATE_NBT_GAMERULE(".Data.GameRules.naturalRegeneration", naturalRegeneration);
+
+#undef UPDATE_NBT_STR
+#undef UPDATE_NBT_LONG
+#undef UPDATE_NBT_ULONG
+#undef UPDATE_NBT_INT
+#undef UPDATE_NBT_BOOL
+#undef UPDATE_NBT_GAMERULE
+
+  FILE* f = fopen(into, "wb");
+  if (f && nbt_dump_file(node, f, STRAT_GZIP) == NBT_OK) {
+  	fclose(f);
+  	nbt_free(node);
+  	return 0;
+  }
+  fclose(f);
+error:
+  nbt_free(node);
+  return -3;
+}
+
 void free_level(level* lvl) {
   if (lvl) {
 	if (lvl->filename)

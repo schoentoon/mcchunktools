@@ -209,6 +209,13 @@ typedef struct {
  */
 level* open_level(char* filename);
 
+/** Write our level structure into a file
+ * @param into the filepath to write into, must exist. If NULL it'll be written into the original path.
+ */
+int write_level(level* lvl, char* into);
+
+/** Free function for the level structure
+ */
 void free_level(level* lvl);
 
 #ifdef __cplusplus
