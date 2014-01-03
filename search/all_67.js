@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['gamerules',['gamerules',['../structlevel.html#a5d801cb1f4276decb85bbfbc539d77c1',1,'level']]],
   ['get_5fbiome_5fname',['get_biome_name',['../mcchunk_8h.html#a253556456d3a934c6a38ea5994d79994',1,'mcchunk.h']]],
   ['get_5fblock_5fname',['get_block_name',['../mcchunk_8h.html#ad3273d9e3acd5b35b9459cd9781bc83b',1,'mcchunk.h']]],
   ['get_5fchunk',['get_chunk',['../mcchunk_8h.html#a0dc860f44ac4d774cc421e9c9b8ad643',1,'mcchunk.h']]],

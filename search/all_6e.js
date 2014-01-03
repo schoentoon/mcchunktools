@@ -1,6 +1,7 @@
 var searchData=
 [
   ['name',['name',['../structnbt__node.html#a5ac083a645d964373f022d03df4849c8',1,'nbt_node']]],
+  ['naturalregeneration',['naturalRegeneration',['../structlevel.html#a919c62c0811cf07428cfa67b8b4995f7',1,'level']]],
   ['nbt_2eh',['nbt.h',['../nbt_8h.html',1,'']]],
   ['nbt_5fclone',['nbt_clone',['../nbt_8h.html#abf91e7c78f59341d7c0d85940bf968d3',1,'nbt.h']]],
   ['nbt_5fcompression_5fstrategy',['nbt_compression_strategy',['../nbt_8h.html#af8cf876b36a4d02e5a390357762a56e7',1,'nbt.h']]],

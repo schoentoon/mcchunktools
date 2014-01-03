@@ -112,6 +112,8 @@ Data Structures</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structchunk.html">chunk</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlevel.html">level</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -180,6 +182,12 @@ Functions</h2></td></tr>
 <tr class="separator:a0dc860f44ac4d774cc421e9c9b8ad643"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc466eb72a20182868f1b82f97356a9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#afc466eb72a20182868f1b82f97356a9e">free_chunk</a> (<a class="el" href="structchunk.html">chunk</a> *c)</td></tr>
 <tr class="separator:afc466eb72a20182868f1b82f97356a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65ab63f01cfba563cd5da33f50285590"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlevel.html">level</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a65ab63f01cfba563cd5da33f50285590">open_level</a> (char *filename)</td></tr>
+<tr class="separator:a65ab63f01cfba563cd5da33f50285590"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a2c3110aa40fddd87eda08646d6a5cf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a1a2c3110aa40fddd87eda08646d6a5cf">write_level</a> (<a class="el" href="structlevel.html">level</a> *lvl, char *into)</td></tr>
+<tr class="separator:a1a2c3110aa40fddd87eda08646d6a5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a7e93dbf5111c6636a63f9a99b003d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcchunk_8h.html#a2a7e93dbf5111c6636a63f9a99b003d6">free_level</a> (<a class="el" href="structlevel.html">level</a> *lvl)</td></tr>
+<tr class="separator:a2a7e93dbf5111c6636a63f9a99b003d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a30685e958d599410e5cf70c42b50ee24"></a>
@@ -197,7 +205,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Calculate in which chunk this coordinate is </p>
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00130">130</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00132">132</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -211,7 +219,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00048">48</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00050">50</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -225,7 +233,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00047">47</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00049">49</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -239,7 +247,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00046">46</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00048">48</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -296,7 +304,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00087">87</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00089">89</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -310,7 +318,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00080">80</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00082">82</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -331,7 +339,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00061">61</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
+<p>Definition at line <a class="el" href="mcchunk_8h_source.html#l00063">63</a> of file <a class="el" href="mcchunk_8h_source.html">mcchunk.h</a>.</p>
 
 </div>
 </div>
@@ -475,6 +483,23 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Free function for the chunk structure </p>
+
+</div>
+</div>
+<a class="anchor" id="a2a7e93dbf5111c6636a63f9a99b003d6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void free_level </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structlevel.html">level</a> *&#160;</td>
+          <td class="paramname"><em>lvl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Free function for the level structure </p>
 
 </div>
 </div>
@@ -677,6 +702,23 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a65ab63f01cfba563cd5da33f50285590"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structlevel.html">level</a>* open_level </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Open a level.dat file </p>
+
+</div>
+</div>
 <a class="anchor" id="acb23e75d6c72db0632e9d4c9917695bb"></a>
 <div class="memitem">
 <div class="memproto">
@@ -797,6 +839,39 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Writes the chunk to the regionfile at position cx, cz </p>
+
+</div>
+</div>
+<a class="anchor" id="a1a2c3110aa40fddd87eda08646d6a5cf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int write_level </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structlevel.html">level</a> *&#160;</td>
+          <td class="paramname"><em>lvl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>into</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Write our level structure into a file </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">into</td><td>the filepath to write into, must exist. If NULL it'll be written into the original path. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
