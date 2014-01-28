@@ -74,6 +74,11 @@ regionfile* open_regionfile(char* filename);
  */
 void free_region(regionfile* region);
 
+/** Used to cleanup the chunks in the region file
+ *  will return the amount of bytes it zero'd out
+ */
+int cleanup_region(regionfile* region);
+
 /** Count the amount of chunks available in this
  * region structure
  */

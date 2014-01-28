@@ -281,6 +281,53 @@ uint8_t region_chunk_sector_count(regionfile* region, int32_t cx, int32_t cz) {
   return (uint8_t) offset & 0xff;
 };
 
+int cleanup_region(regionfile* region) {
+  if (!region)
+    return 0;
+  FILE* f;
+  if (region->keepopen == 1) {
+    if (region->file)
+      f = region->file;
+    else {
+      f = fopen(region->filename, "rb+");
+      region->file = f;
+    }
+  } else
+    f = fopen(region->filename, "rb+");
+  size_t output = 0;
+  char zerobuf[SECTOR_BYTES];
+  bzero(zerobuf, sizeof(zerobuf));
+  size_t i;
+  for (i = 0; i < SECTOR_INTS; i++) {
+    uint32_t offset = region->offsets[i];
+    if (offset == 0)
+      continue;
+    uint32_t numSectors = offset & 0xff;
+    if (numSectors == 0)
+      continue;
+    uint32_t sectorStart = offset >> 8;
+    if (f && fseek(f, sectorStart*SECTOR_BYTES, SEEK_SET) == 0) {
+      unsigned char buf[5];
+      if (fread(buf, 1, sizeof(buf), f) == sizeof(buf)) {
+        size_t size = be32toh((uint32_t) (buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24)));
+        size_t to_cleanup = (numSectors*SECTOR_BYTES) - size - 5;
+        if (to_cleanup <= SECTOR_BYTES && fseek(f, (sectorStart*SECTOR_BYTES)+5+size, SEEK_SET) == 0) {
+          int wrote = fwrite(&zerobuf, sizeof(char), to_cleanup, f);
+          if (wrote == to_cleanup)
+            output += to_cleanup;
+          else {
+            fprintf(stderr, "wrote %d instead of %d\n", wrote, to_cleanup);
+            return -1;
+          }
+        }
+      }
+    }
+  }
+  if (region->file != f)
+    fclose(f);
+  return output;
+};
+
 nbt_node* get_raw_chunk(regionfile* region, int32_t cx, int32_t cz) {
   if (!region)
     return NULL;
