@@ -316,7 +316,7 @@ int cleanup_region(regionfile* region) {
           if (wrote == to_cleanup)
             output += to_cleanup;
           else {
-            fprintf(stderr, "wrote %d instead of %d\n", wrote, to_cleanup);
+            fprintf(stderr, "wrote %d instead of %zu\n", wrote, to_cleanup);
             return -1;
           }
         }
