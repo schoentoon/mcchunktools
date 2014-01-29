@@ -26,6 +26,7 @@
 static const struct option g_LongOpts[] = {
   { "help",       no_argument,       0, 'h' },
   { "world",      required_argument, 0, 'w' },
+  { "regionfile", required_argument, 0, 'r' },
   { 0, 0, 0, 0 }
 };
 
@@ -51,7 +52,8 @@ char* to_byte_str(unsigned long long b) {
 
 int usage(char* program) {
   fprintf(stderr, "Usage: %s [OPTIONS]\n", program);
-  fprintf(stderr, "--world, -w Optimize this world [required]\n");
+  fprintf(stderr, "--world, -w Optimize this world.\n");
+  fprintf(stderr, "--regionfile, -r Run it on a single region file instead of an entire world.\n");
   return 1;
 };
 
@@ -101,18 +103,33 @@ int main(int argc, char** argv) {
   char* wdir = NULL;
   {
     int arg, optindex;
-    while ((arg = getopt_long(argc, argv, "hw:", g_LongOpts, &optindex)) != -1) {
+    while ((arg = getopt_long(argc, argv, "hw:r:", g_LongOpts, &optindex)) != -1) {
       switch (arg) {
       case 'h':
         return usage(argv[0]);
       case 'w':
         wdir = optarg;
         break;
+      case 'r': {
+        regionfile* region = open_regionfile(optarg);
+        int cleaned_up = cleanup_region(region);
+        if (cleaned_up < 0) {
+          fprintf(stderr, "An error occured while processing %s, exiting.\n", optarg);
+          return 1;
+        };
+        fprintf(stderr, "%s:%d\n", optarg, cleaned_up);
+        free_region(region);
+        if (!wdir)
+          wdir = (char*) 1; // Just to indicate we did at least something so we don't exit with non zero.
+        break;
+      }
       }
     }
   }
   if (!wdir)
     return usage(argv[0]);
+  else if (wdir == (char*) 1)
+    return 0;
   {
     size_t len = strlen(wdir);
     if (wdir[len-1] == '/')
