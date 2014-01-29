@@ -29,6 +29,26 @@ static const struct option g_LongOpts[] = {
   { 0, 0, 0, 0 }
 };
 
+char* to_byte_str(unsigned long long b) {
+  const unsigned long long KiB = 1024;
+  const unsigned long long MiB = KiB * 1024;
+  const unsigned long long GiB = MiB * 1024;
+  const unsigned long long TiB = GiB * 1024;
+
+  char buf[BUFSIZ];
+  if (b > TiB)
+    snprintf(buf, sizeof(buf), "%f TiB", ((float) b)/TiB);
+  else if (b > GiB)
+    snprintf(buf, sizeof(buf), "%f GiB", ((float) b)/GiB);
+  else if (b > MiB)
+    snprintf(buf, sizeof(buf), "%f MiB", ((float) b)/MiB);
+  else if (b > KiB)
+    snprintf(buf, sizeof(buf), "%f KiB", ((float) b)/KiB);
+  else
+    snprintf(buf, sizeof(buf), "%llu B", b);
+  return strdup(buf);
+};
+
 int usage(char* program) {
   fprintf(stderr, "Usage: %s [OPTIONS]\n", program);
   fprintf(stderr, "--world, -w Optimize this world [required]\n");
@@ -99,6 +119,8 @@ int main(int argc, char** argv) {
       wdir[len-1] = '\0';
   }
   int cleaned_up = loop_directory(wdir);
-  fprintf(stderr, "Zeroed out a total of %d bytes.\n", cleaned_up);
+  char* byte_str = to_byte_str(cleaned_up);
+  fprintf(stderr, "Zeroed out a total of %s.\n", byte_str);
+  free(byte_str);
   return 0;
 };
